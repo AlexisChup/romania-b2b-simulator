@@ -279,3 +279,100 @@ select.input-field {
   background: var(--color-primary-hover);
   box-shadow: var(--shadow-md);
 }
+
+/* ─── Segmented control (eligibility page variant) ─── */
+.seg-control {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.seg-control .seg-btn {
+  flex: 1;
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Forms: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .field-with-toggle {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-with-action {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .segmented-control,
+  .seg-control {
+    align-self: stretch;
+  }
+
+  .seg-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+
+  .input-field {
+    padding: 10px 12px;
+    font-size: 15px; /* prevent iOS zoom */
+    min-height: 44px;
+  }
+
+  select.input-field {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  .btn {
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .btn-primary {
+    bottom: 12px;
+  }
+
+  .btn-icon {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+
+  .input-section {
+    padding: 16px;
+  }
+
+  .section-heading {
+    font-size: 14px;
+  }
+
+  .checkbox-label {
+    min-height: 44px;
+    align-items: center;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Forms: Small phones (≤ 480px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .input-section {
+    padding: 14px;
+  }
+
+  .section-desc {
+    font-size: 11px;
+  }
+
+  .input-label {
+    font-size: 12px;
+  }
+
+  .input-hint {
+    font-size: 11px;
+  }
+}

@@ -11,4 +11,30 @@
   box-shadow: var(--shadow-sm);
   height: 340px;
   position: relative;
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Charts: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 280px;
+    padding: 12px 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .chart-section {
+    margin-bottom: 16px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Charts: Small phones (≤ 480px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .chart-container {
+    height: 240px;
+    padding: 10px 8px;
+  }
 }

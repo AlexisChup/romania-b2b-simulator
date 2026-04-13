@@ -62,3 +62,53 @@
   color: var(--color-text-secondary);
   line-height: 1.6;
 }
+
+/* ══════════════════════════════════════════════════
+   ─── Glossary: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .glossary-content {
+    padding-bottom: 40px;
+  }
+
+  .glossary-category {
+    margin-bottom: 24px;
+  }
+
+  .glossary-category-title {
+    font-size: 16px;
+  }
+
+  .glossary-term {
+    padding: 12px 14px;
+    scroll-margin-top: 56px;
+  }
+
+  .glossary-term-header {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .glossary-acronym {
+    font-size: 15px;
+  }
+
+  .glossary-desc {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .glossary-term {
+    padding: 10px 12px;
+  }
+
+  .glossary-fullname {
+    font-size: 12px;
+  }
+
+  .glossary-desc {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}

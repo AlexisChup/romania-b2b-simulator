@@ -54,3 +54,18 @@ body {
   margin: 0 auto;
   padding: 0 24px;
 }
+
+/* ─── Global overflow prevention ─── */
+html {
+  overflow-x: hidden;
+}
+
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Results area needs min-width: 0 to prevent grid blowout */
+.results-area {
+  min-width: 0;
+}

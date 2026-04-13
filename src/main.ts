@@ -4,7 +4,7 @@ import { simulateAll } from './core/formulaEngine';
 import { generateWarnings } from './core/warnings';
 import { generateRecommendations } from './core/recommendationEngine';
 import { compareResults } from './core/comparators';
-import { renderComparisonCards, renderRecommendations, renderWarnings, renderScenarioSummary, renderBestScenario } from './components/resultsPanel';
+import { renderComparisonCards, renderRecommendations, renderWarnings, renderScenarioSummary, renderBestScenario, initInfoPopupPortalOnce } from './components/resultsPanel';
 import { renderMonthlyChart } from './components/monthlyChart';
 import { renderConstantsTable } from './components/constantsPanel';
 import { getDefaults } from './core/constants';
@@ -272,4 +272,8 @@ document.querySelectorAll<HTMLInputElement>('.input-panel input, .input-panel se
 // ─── Constants table ───
 
 renderConstantsTable(constantsTable);
+
+// ─── Info popup portal for mobile ───
+
+initInfoPopupPortalOnce();
 

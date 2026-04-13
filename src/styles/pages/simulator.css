@@ -142,3 +142,60 @@
   font-size: 11px;
   color: var(--color-text-muted);
 }
+
+/* ══════════════════════════════════════════════════
+   ─── Simulator: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .scenario-grid {
+    gap: 10px 16px;
+  }
+
+  .scenario-summary-card {
+    padding: 14px 16px;
+  }
+
+  .scenario-title {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .scenario-value {
+    font-size: 13px;
+  }
+
+  .comparison-grid {
+    gap: 12px;
+  }
+
+  .comparison-section {
+    margin-bottom: 16px;
+  }
+
+  .recommendations-section,
+  .warnings-section {
+    margin-bottom: 16px;
+  }
+
+  .results-area {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .scenario-grid {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .scenario-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .best-scenario-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

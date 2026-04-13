@@ -33,3 +33,36 @@
 .about-content a:hover {
   text-decoration: underline;
 }
+
+/* ══════════════════════════════════════════════════
+   ─── About: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .about-content {
+    padding: 24px 0 40px;
+  }
+
+  .about-content h1 {
+    font-size: 24px;
+  }
+
+  .about-content h2 {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  .about-content p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-content h1 {
+    font-size: 22px;
+  }
+
+  .about-content p {
+    font-size: 13px;
+  }
+}

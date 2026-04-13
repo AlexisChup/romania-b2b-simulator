@@ -276,7 +276,7 @@ details.breakdown-details[open] summary {
 .cell-formula-popup {
   display: none;
   position: fixed;
-  z-index: 1000;
+  z-index: 9999;
   background: var(--color-text);
   color: #fff;
   padding: 10px 14px;
@@ -305,6 +305,53 @@ details.breakdown-details[open] summary {
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-top-color: var(--color-text);
+}
+
+/* Below-cell variant (when no room above) */
+.cell-formula-popup--below {
+  transform: translate(-50%, 0);
+}
+
+.cell-formula-popup--below::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--color-text);
+}
+
+/* Mobile: bottom-anchored panel */
+.cell-formula-popup--mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0 !important;
+  right: 0;
+  top: auto !important;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  transform: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 16px 20px 24px;
+  pointer-events: auto;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.15);
+}
+
+.cell-formula-popup--mobile::after {
+  display: none;
+}
+
+/* Backdrop for mobile formula popup */
+.cell-formula-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(0,0,0,0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cell-formula-backdrop.visible {
+  display: block;
 }
 
 /* ─── Formula ledger (structured steps) ─── */
@@ -360,4 +407,161 @@ details.breakdown-details[open] summary {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.55);
   font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Tables: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ─ Constants table ─ */
+  .constants-section {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+
+  .constants-table-wrap {
+    -webkit-overflow-scrolling: touch;
+    margin-top: 12px;
+    position: relative;
+  }
+
+  .constants-table {
+    font-size: 12px;
+  }
+
+  .constants-table th {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .constants-table td {
+    padding: 6px 8px;
+  }
+
+  .constant-desc {
+    max-width: 200px;
+    font-size: 11px;
+  }
+
+  .toggle-hint {
+    font-size: 12px;
+  }
+
+  /* ─ Breakdown table ─ */
+  .breakdown-table-wrap {
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  /* Visual scroll hint: fade on right edge */
+  .breakdown-table-wrap::after {
+    content: '';
+    position: sticky;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.8));
+    pointer-events: none;
+    display: block;
+    float: right;
+    margin-top: -100%;
+    height: 100%;
+  }
+
+  .breakdown-table {
+    font-size: 10px;
+    min-width: 800px;
+  }
+
+  .breakdown-table thead th {
+    padding: 5px 6px;
+    font-size: 9px;
+  }
+
+  .breakdown-table tbody td {
+    padding: 4px 6px;
+  }
+
+  .breakdown-table thead th.bd-label-head {
+    min-width: 140px;
+    position: sticky;
+    left: 0;
+    background: var(--color-bg);
+    z-index: 2;
+  }
+
+  .breakdown-table tbody td.bd-label {
+    position: sticky;
+    left: 0;
+    background: var(--color-surface);
+    z-index: 1;
+    min-width: 140px;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.04);
+  }
+
+  .bd-section-label {
+    font-size: 10px;
+    padding: 8px 8px 4px !important;
+  }
+
+  /* ─ Cell formula popup ─ */
+  .cell-formula-popup {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+
+  .cell-formula-popup--mobile {
+    font-size: 13px;
+    padding: 16px 20px 24px;
+  }
+
+  .formula-step {
+    gap: 8px;
+  }
+
+  .formula-step-label {
+    font-size: 11px;
+  }
+
+  .formula-step-amount {
+    font-size: 11px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Tables: Small phones (≤ 480px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .breakdown-table {
+    min-width: 720px;
+    font-size: 9px;
+  }
+
+  .breakdown-table thead th {
+    padding: 4px 5px;
+    font-size: 8px;
+  }
+
+  .breakdown-table tbody td {
+    padding: 3px 5px;
+  }
+
+  .breakdown-table thead th.bd-label-head {
+    min-width: 120px;
+  }
+
+  .breakdown-table tbody td.bd-label {
+    min-width: 120px;
+    font-size: 10px;
+  }
+
+  .constants-table {
+    font-size: 11px;
+  }
+
+  .constants-table th,
+  .constants-table td {
+    padding: 5px 6px;
+  }
 }

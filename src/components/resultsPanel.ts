@@ -262,6 +262,71 @@ export function renderComparisonCards(
 
   // Cell formula tooltip system
   initCellFormulaTooltips(container);
+
+  // Info-popup portal system for mobile (handles ? icons inside overflow containers)
+  // Initialize once globally — covers all pages, not just comparison cards
+  initInfoPopupPortalOnce();
+}
+
+/** Detect touch-primary device */
+function isTouchDevice(): boolean {
+  return window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 768;
+}
+
+/**
+ * Portal-based info popup system for mobile.
+ * On touch devices, ? icon taps open a fixed overlay on document.body
+ * instead of relying on CSS :hover/:focus inside overflow containers.
+ * Initializes once globally on document.body to cover all pages.
+ */
+let infoPortalInitialized = false;
+
+export function initInfoPopupPortalOnce(): void {
+  if (infoPortalInitialized) return;
+  if (!isTouchDevice()) return;
+  infoPortalInitialized = true;
+
+  // Create overlay backdrop + popup container on body
+  const overlay = document.createElement('div');
+  overlay.className = 'info-portal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+
+  const portalContent = document.createElement('div');
+  portalContent.className = 'info-portal-content';
+
+  overlay.appendChild(portalContent);
+  document.body.appendChild(overlay);
+
+  function closePortal() {
+    overlay.classList.remove('visible');
+  }
+
+  // Dismiss on overlay tap
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closePortal();
+    }
+  });
+
+  // Intercept taps on .info-trigger anywhere on the page
+  document.body.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest('.info-trigger') as HTMLElement | null;
+    if (!trigger) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const popup = trigger.querySelector('.info-popup');
+    if (!popup) return;
+
+    // Clone content into portal
+    portalContent.innerHTML = popup.innerHTML;
+    overlay.classList.add('visible');
+
+    // Remove focus from trigger so CSS :focus popup doesn't also show
+    trigger.blur();
+  }, true);
 }
 
 function initCellFormulaTooltips(container: HTMLElement): void {
@@ -274,6 +339,15 @@ function initCellFormulaTooltips(container: HTMLElement): void {
     document.body.appendChild(popup);
   }
 
+  // Create backdrop for mobile tap-to-dismiss
+  let backdrop = document.querySelector('.cell-formula-backdrop') as HTMLElement | null;
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'cell-formula-backdrop';
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener('click', () => hidePopup());
+  }
+
   let activeCell: HTMLElement | null = null;
 
   function renderSteps(steps: FormulaStep[]): string {
@@ -282,6 +356,54 @@ function initCellFormulaTooltips(container: HTMLElement): void {
       const amountHtml = step.amount ? `<span class="formula-step-amount">${step.amount}</span>` : '';
       return `<div class="${cls}"><span class="formula-step-label">${step.label}</span>${amountHtml}</div>`;
     }).join('')}</div>`;
+  }
+
+  function positionPopup(cell: HTMLElement) {
+    if (!popup) return;
+
+    const mobile = isTouchDevice();
+    const cellRect = cell.getBoundingClientRect();
+
+    if (mobile) {
+      // Mobile: bottom-anchored panel, full width
+      popup.classList.add('cell-formula-popup--mobile');
+      popup.style.left = '';
+      popup.style.top = '';
+      popup.style.right = '';
+      popup.style.bottom = '';
+      // Show backdrop
+      if (backdrop) backdrop.classList.add('visible');
+    } else {
+      // Desktop: position above cell, centered
+      popup.classList.remove('cell-formula-popup--mobile');
+      if (backdrop) backdrop.classList.remove('visible');
+
+      // Measure popup to do viewport-aware positioning
+      popup.style.left = `${cellRect.left + cellRect.width / 2}px`;
+      popup.style.top = `${cellRect.top - 8}px`;
+
+      // After render, check if popup goes off-screen and adjust
+      requestAnimationFrame(() => {
+        if (!popup) return;
+        const popupRect = popup.getBoundingClientRect();
+
+        // Prevent left overflow
+        if (popupRect.left < 8) {
+          popup.style.left = `${8 + popupRect.width / 2}px`;
+        }
+        // Prevent right overflow
+        if (popupRect.right > window.innerWidth - 8) {
+          popup.style.left = `${window.innerWidth - 8 - popupRect.width / 2}px`;
+        }
+        // If not enough room above, show below
+        if (popupRect.top < 8) {
+          popup.style.top = `${cellRect.bottom + 8}px`;
+          popup.classList.add('cell-formula-popup--below');
+        } else {
+          popup.classList.remove('cell-formula-popup--below');
+        }
+      });
+    }
   }
 
   function showPopup(cell: HTMLElement) {
@@ -308,15 +430,15 @@ function initCellFormulaTooltips(container: HTMLElement): void {
     activeCell = cell;
     cell.classList.add('bd-cell-active');
 
-    // Position using fixed coordinates relative to viewport
-    const cellRect = cell.getBoundingClientRect();
-    popup.style.left = `${cellRect.left + cellRect.width / 2}px`;
-    popup.style.top = `${cellRect.top - 8}px`;
+    positionPopup(cell);
   }
 
   function hidePopup() {
     if (!popup) return;
     popup.classList.remove('visible');
+    popup.classList.remove('cell-formula-popup--mobile');
+    popup.classList.remove('cell-formula-popup--below');
+    if (backdrop) backdrop.classList.remove('visible');
     if (activeCell) {
       activeCell.classList.remove('bd-cell-active');
       activeCell = null;
@@ -327,11 +449,13 @@ function initCellFormulaTooltips(container: HTMLElement): void {
 
   // Delegate events on the container
   container.addEventListener('mouseenter', (e) => {
+    if (isTouchDevice()) return; // skip hover on touch
     const cell = (e.target as HTMLElement).closest(cellSelector) as HTMLElement | null;
     if (cell) showPopup(cell);
   }, true);
 
   container.addEventListener('mouseleave', (e) => {
+    if (isTouchDevice()) return;
     const cell = (e.target as HTMLElement).closest(cellSelector) as HTMLElement | null;
     if (cell) hidePopup();
   }, true);
@@ -346,10 +470,17 @@ function initCellFormulaTooltips(container: HTMLElement): void {
         hidePopup();
         showPopup(cell);
       }
-    } else {
+      e.stopPropagation();
+    } else if (isTouchDevice()) {
+      // Tap outside cell on mobile = dismiss
       hidePopup();
     }
   });
+
+  // Also dismiss on scroll for mobile (table scrolls horizontally)
+  container.addEventListener('scroll', () => {
+    if (activeCell) hidePopup();
+  }, true);
 }
 
 export function renderRecommendations(

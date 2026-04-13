@@ -26,6 +26,9 @@ export function renderMonthlyChart(canvas: HTMLCanvasElement, results: Simulatio
     chartInstance = null;
   }
 
+  const isMobile = window.innerWidth <= 768;
+  const isSmallMobile = window.innerWidth <= 480;
+
   const datasets: {
     label: string;
     data: number[];
@@ -54,8 +57,8 @@ export function renderMonthlyChart(canvas: HTMLCanvasElement, results: Simulatio
       data: cumulative,
       borderColor: color,
       backgroundColor: color + '10',
-      borderWidth: 2.5,
-      pointRadius: 3,
+      borderWidth: isMobile ? 2 : 2.5,
+      pointRadius: isMobile ? 2 : 3,
       tension: 0.15,
       fill: false,
     });
@@ -78,9 +81,10 @@ export function renderMonthlyChart(canvas: HTMLCanvasElement, results: Simulatio
         legend: {
           position: 'bottom',
           labels: {
-            font: { size: 12, family: "'Inter', sans-serif" },
+            font: { size: isSmallMobile ? 10 : (isMobile ? 11 : 12), family: "'Inter', sans-serif" },
             usePointStyle: true,
-            padding: 16,
+            padding: isMobile ? 10 : 16,
+            boxWidth: isMobile ? 8 : 10,
           },
         },
         tooltip: {
@@ -93,18 +97,19 @@ export function renderMonthlyChart(canvas: HTMLCanvasElement, results: Simulatio
         x: {
           grid: { display: false },
           ticks: {
-            font: { size: 12, family: "'Inter', sans-serif" },
+            font: { size: isSmallMobile ? 9 : (isMobile ? 10 : 12), family: "'Inter', sans-serif" },
+            maxRotation: isMobile ? 45 : 0,
           },
         },
         y: {
           title: {
-            display: true,
+            display: !isMobile,
             text: 'Cumulative personal cash (EUR)',
             font: { size: 12, family: "'Inter', sans-serif" },
           },
           ticks: {
             callback: (value) => `€${Number(value).toLocaleString()}`,
-            font: { size: 11, family: "'Inter', sans-serif" },
+            font: { size: isSmallMobile ? 9 : (isMobile ? 10 : 11), family: "'Inter', sans-serif" },
           },
           grid: {
             color: 'rgba(0,0,0,0.05)',

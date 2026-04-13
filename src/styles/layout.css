@@ -20,10 +20,52 @@
   text-decoration: none;
   color: var(--color-text);
   letter-spacing: -0.5px;
+  flex-shrink: 0;
 }
 
 .logo-accent {
   color: var(--color-primary);
+}
+
+/* ─── Hamburger toggle ─── */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-toggle:hover {
+  background: var(--color-bg);
+}
+
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-open .nav-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-open .nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-open .nav-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .main-nav {
@@ -88,12 +130,6 @@
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .simulator-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
 .main-content {
   padding-bottom: 60px;
 }
@@ -105,16 +141,6 @@
   gap: 24px;
   align-items: start;
   margin-bottom: 60px;
-}
-
-@media (max-width: 900px) {
-  .eligibility-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .eligibility-layout aside .input-panel {
-    position: static;
-  }
 }
 
 .eligibility-results-col {
@@ -177,25 +203,172 @@
   text-decoration: underline;
 }
 
-/* ─── Responsive (global) ─── */
-@media (max-width: 600px) {
+/* ══════════════════════════════════════════════════
+   ─── Responsive: Tablet (≤ 1024px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .simulator-layout {
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+  }
+
+  .eligibility-layout {
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Responsive: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ─ Hamburger nav ─ */
+  .nav-toggle {
+    display: flex;
+  }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    flex-direction: column;
+    padding: 8px 16px 16px;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    gap: 2px;
+  }
+
+  .nav-open .main-nav {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+    font-size: 15px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ─ Layouts → single column ─ */
+  .simulator-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .eligibility-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .eligibility-layout aside .input-panel {
+    position: static;
+  }
+
+  /* ─ Input panel sticky → static ─ */
+  .input-panel {
+    position: static !important;
+  }
+
+  /* ─ Intro spacing ─ */
+  .intro {
+    padding: 24px 0 16px;
+  }
+
   .intro h1 {
     font-size: 22px;
   }
 
+  .intro-sub {
+    font-size: 14px;
+  }
+
+  /* ─ Cards ─ */
+  .card {
+    padding: 16px;
+  }
+
+  /* ─ Recommendation cards ─ */
   .recommendation-cards {
     flex-direction: column;
   }
 
+  /* ─ Input rows ─ */
   .input-row {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  /* Collapse rows with multiple full input groups (e.g., tax year + min wage) */
+  .input-row:has(> .input-group + .input-group) {
     grid-template-columns: 1fr;
+    align-items: stretch;
   }
 
-  .input-panel {
-    position: static;
-  }
-
+  /* ─ Structures grid ─ */
   .structures-content {
     grid-template-columns: 1fr;
+  }
+
+  /* ─ Footer ─ */
+  .site-footer {
+    margin-top: 24px;
+    padding: 20px 0;
+  }
+
+  /* ─ Main content ─ */
+  .main-content {
+    padding-bottom: 40px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Responsive: Small phones (≤ 480px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .intro {
+    padding: 20px 0 12px;
+  }
+
+  .intro h1 {
+    font-size: 20px;
+    letter-spacing: -0.3px;
+  }
+
+  .intro-sub {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .card {
+    padding: 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .header-inner {
+    height: 48px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .eligibility-layout {
+    margin-bottom: 40px;
   }
 }

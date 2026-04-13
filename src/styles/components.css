@@ -331,9 +331,11 @@ details.result-details summary {
   vertical-align: middle;
   margin-left: 4px;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.info-trigger:hover .info-popup {
+.info-trigger:hover .info-popup,
+.info-trigger:focus .info-popup {
   display: block;
 }
 
@@ -364,6 +366,38 @@ details.result-details summary {
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-top-color: var(--color-text);
+}
+
+/* ─── Info portal overlay (mobile tap-to-show for ? icons) ─── */
+.info-portal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.35);
+  align-items: flex-end;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.info-portal-overlay.visible {
+  display: flex;
+}
+
+.info-portal-content {
+  background: var(--color-text);
+  color: #fff;
+  padding: 20px 24px 28px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
+  max-height: 60vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ─── Glossary links (inline, used across all pages) ─── */
@@ -403,4 +437,169 @@ details.result-details summary {
 
 .elig-structure-name .glossary-link:hover {
   color: var(--color-primary);
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Components: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ─ Info popup: disable CSS hover/focus on mobile (JS portal handles it) ─ */
+  .info-trigger:hover .info-popup,
+  .info-trigger:focus .info-popup {
+    display: none;
+  }
+
+  /* Make info-trigger tap-friendly */
+  .info-trigger {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  /* ─ Result cards ─ */
+  .result-card {
+    padding: 16px;
+  }
+
+  .result-card-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .result-badges {
+    justify-content: flex-start;
+  }
+
+  .result-structure-name {
+    font-size: 18px;
+  }
+
+  .result-hero-value {
+    font-size: 24px;
+  }
+
+  .result-hero {
+    padding: 12px 0;
+  }
+
+  /* ─ Best scenario card ─ */
+  .best-scenario-inner {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .best-scenario-stats {
+    margin-left: 0;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .best-scenario-stat {
+    align-items: flex-start;
+  }
+
+  .best-scenario-structure {
+    font-size: 20px;
+  }
+
+  .best-scenario-card {
+    padding: 14px 16px;
+  }
+
+  /* ─ Recommendation cards ─ */
+  .rec-card {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .rec-structure {
+    font-size: 16px;
+  }
+
+  /* ─ Warnings ─ */
+  .warning-item {
+    padding: 10px 12px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  /* ─ Panel titles ─ */
+  .panel-title {
+    font-size: 15px;
+  }
+
+  /* ─ Dual currency display ─ */
+  .dual-ron {
+    font-size: 10px;
+  }
+
+  /* ─ Empty state ─ */
+  .empty-state {
+    padding: 48px 16px;
+  }
+
+  .empty-icon {
+    font-size: 36px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ─── Components: Small phones (≤ 480px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .result-card {
+    padding: 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .result-structure-name {
+    font-size: 16px;
+  }
+
+  .result-hero-value {
+    font-size: 22px;
+  }
+
+  .result-hero-sub {
+    font-size: 12px;
+  }
+
+  .result-row {
+    font-size: 12px;
+  }
+
+  .result-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .best-scenario-stat-value {
+    font-size: 14px;
+  }
+
+  .best-scenario-structure {
+    font-size: 18px;
+  }
+
+  .rec-card {
+    padding: 12px 14px;
+  }
+
+  .warning-item {
+    padding: 8px 10px;
+    font-size: 12px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .warning-icon {
+    margin-top: 0;
+  }
+
+  .info-popup {
+    font-size: 11px;
+    padding: 8px 12px;
+  }
 }

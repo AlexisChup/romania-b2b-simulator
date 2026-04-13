@@ -332,3 +332,66 @@
   max-width: 420px;
   margin: 0 auto;
 }
+
+/* ══════════════════════════════════════════════════
+   ─── Eligibility: Mobile (≤ 768px) ───
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .elig-card {
+    padding: 1rem;
+  }
+
+  .elig-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elig-structure-name {
+    font-size: 1.1rem;
+  }
+
+  .elig-bff-name {
+    font-size: 22px;
+  }
+
+  .elig-bff-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .elig-bff-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .elig-bff-summary {
+    font-size: 13px;
+  }
+
+  .elig-empty-state {
+    padding: 48px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .elig-card {
+    padding: 0.875rem;
+  }
+
+  .elig-structure-name {
+    font-size: 1rem;
+  }
+
+  .elig-reason {
+    font-size: 0.8rem;
+  }
+
+  .elig-bff-name {
+    font-size: 20px;
+  }
+
+  .elig-status-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
