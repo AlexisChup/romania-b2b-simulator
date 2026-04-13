@@ -1,0 +1,134 @@
+{
+  "structures": [
+    {
+      "id": "PFA",
+      "name": "PFA",
+      "fullName": "Persoană Fizică Autorizată",
+      "legalNature": "Individual business form under OUG 44/2008. No separate legal personality.",
+      "soloEligible": true,
+      "maxCaenClasses": 5,
+      "maxEmployees": 3,
+      "canHireEmployees": true,
+      "multipleClients": true,
+      "liabilityType": "unlimited",
+      "liabilityDescription": "Personal liability — business patrimony first, then personal assets.",
+      "bookkeeping": "Single-entry (partidă simplă)",
+      "taxLogic": "Personal income tax (10%) on net income + CAS (25%) and CASS (10%) based on threshold bands.",
+      "adminComplexity": "low",
+      "pros": [
+        "Simplest setup and lowest admin overhead",
+        "Single-entry bookkeeping — no accountant required for basic cases",
+        "Freedom to contract with multiple clients",
+        "Lower fixed compliance costs",
+        "Can hire up to 3 employees if needed"
+      ],
+      "cons": [
+        "Unlimited personal liability",
+        "CAS/CASS contributions can be high on high-margin income",
+        "Limited to 5 CAEN activity classes",
+        "No ability to retain profits in entity for reinvestment",
+        "CASS scales with income up to 72× min wage cap (2026)"
+      ],
+      "bestFor": "Solo IT contractors with straightforward service income, low overhead, and no need for corporate structure.",
+      "unsuitableWhen": "You need more than 5 CAEN classes, more than 3 employees, or want limited liability and profit retention.",
+      "forcedChangeTriggersDescription": "Need >5 CAEN classes or >3 employees."
+    },
+    {
+      "id": "II",
+      "name": "II",
+      "fullName": "Întreprindere Individuală",
+      "legalNature": "Individual enterprise form under OUG 44/2008. No separate legal personality.",
+      "soloEligible": true,
+      "maxCaenClasses": 10,
+      "maxEmployees": 8,
+      "canHireEmployees": true,
+      "multipleClients": true,
+      "liabilityType": "unlimited",
+      "liabilityDescription": "Personal liability — same model as PFA.",
+      "bookkeeping": "Single-entry (partidă simplă)",
+      "taxLogic": "Same as PFA — personal income tax (10%) on net income + CAS/CASS.",
+      "adminComplexity": "low",
+      "pros": [
+        "More scaling room than PFA — 10 CAEN classes, 8 employees",
+        "Same simple tax logic as PFA",
+        "Single-entry bookkeeping",
+        "Good for diversifying activity types"
+      ],
+      "cons": [
+        "Unlimited personal liability (same as PFA)",
+        "Same CAS/CASS burden as PFA at high margins",
+        "No profit retention or corporate finance flexibility",
+        "Still limited in employees vs SRL"
+      ],
+      "bestFor": "IT contractors who need more CAEN classes or employees than PFA allows, but still want simplicity.",
+      "unsuitableWhen": "You need more than 10 CAEN classes, more than 8 employees, or want limited liability.",
+      "forcedChangeTriggersDescription": "Need >10 CAEN classes or >8 employees."
+    },
+    {
+      "id": "IF",
+      "name": "IF",
+      "fullName": "Întreprindere Familială",
+      "legalNature": "Family enterprise under OUG 44/2008. No separate legal personality. Requires 2+ family members.",
+      "soloEligible": false,
+      "maxCaenClasses": null,
+      "maxEmployees": 0,
+      "canHireEmployees": false,
+      "multipleClients": true,
+      "liabilityType": "unlimited_joint",
+      "liabilityDescription": "Members jointly and severally liable per participation quotas.",
+      "bookkeeping": "Single-entry (partidă simplă)",
+      "taxLogic": "Same as PFA but income split among members by agreement. Each member computes own CAS/CASS/PIT.",
+      "adminComplexity": "medium",
+      "pros": [
+        "Income splitting among family members can reduce per-member CAS/CASS burden",
+        "Single-entry bookkeeping",
+        "Can be useful for family-run IT businesses"
+      ],
+      "cons": [
+        "Cannot hire any employees",
+        "Requires 2+ family members",
+        "Joint and several liability",
+        "Not suitable for solo operators",
+        "Uncommon for IT contractors"
+      ],
+      "bestFor": "Family-run IT businesses where income splitting among members provides tax advantage.",
+      "unsuitableWhen": "You are operating solo, need employees, or want limited liability. Not practical for typical solo IT contracting.",
+      "forcedChangeTriggersDescription": "Want non-family employees or operating solo."
+    },
+    {
+      "id": "SRL",
+      "name": "SRL",
+      "fullName": "Societate cu Răspundere Limitată",
+      "legalNature": "Limited liability company with separate legal personality under company law.",
+      "soloEligible": true,
+      "maxCaenClasses": null,
+      "maxEmployees": null,
+      "canHireEmployees": true,
+      "multipleClients": true,
+      "liabilityType": "limited",
+      "liabilityDescription": "Limited liability — shareholders liable only up to subscribed share capital (with anti-abuse exceptions).",
+      "bookkeeping": "Double-entry accounting, annual financial statements",
+      "taxLogic": "Company tax (micro 1% on revenue or 16% CIT on profit) + payout tax (salary deductions + 16% dividend withholding + possible CASS on dividends).",
+      "adminComplexity": "high",
+      "pros": [
+        "Limited personal liability",
+        "Micro regime: only 1% tax on revenue (if eligible)",
+        "Flexibility in payout timing and strategy (salary vs dividends vs retain)",
+        "Can reinvest profits inside the company",
+        "Best for mixing services + product revenue streams",
+        "No cap on employees or CAEN classes"
+      ],
+      "cons": [
+        "Double-entry bookkeeping — accountant practically required",
+        "Higher fixed admin costs (accountant, filings, payroll)",
+        "Dividend tax increased to 16% from 2026",
+        "Micro ceiling at €100k — regime loss risk if exceeded",
+        "Must have at least 1 employee for micro regime",
+        "Minimum share capital requirements (500/5,000 RON)"
+      ],
+      "bestFor": "IT contractors with high revenue who want tax optimization via salary/dividend mix, limited liability, and profit retention.",
+      "unsuitableWhen": "Very low revenue that doesn't justify admin costs, or you strongly prefer simplicity over tax optimization.",
+      "forcedChangeTriggersDescription": "Micro: revenue > €100k → switches to 16% CIT from that quarter. Employee condition must be met within 90 days for new company."
+    }
+  ]
+}

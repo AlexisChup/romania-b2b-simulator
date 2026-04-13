@@ -1,0 +1,381 @@
+import type { SimulationResult, SimulatorInputs, PfaIiResult, SrlResult, Warning, Recommendation, ComparisonResult, MonthlyBreakdownRow, FormulaStep } from '../core/types';
+import { formatEur, formatDual, formatPct, formatRon } from '../core/formatters';
+import { glossaryLink } from '../core/glossary';
+
+const MONTH_HEADERS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function tooltipHtml(text: string): string {
+  return `<span class="info-trigger" tabindex="0">?<span class="info-popup">${text}</span></span>`;
+}
+
+// Known acronyms to link in breakdown labels
+const LINKABLE_ACRONYMS = ['CAS', 'CASS', 'PIT', 'CAM', 'VAT'];
+
+function linkAcronyms(text: string): string {
+  // Replace whole-word acronyms with glossary links (avoid double-linking)
+  let result = text;
+  for (const acr of LINKABLE_ACRONYMS) {
+    const re = new RegExp(`\\b${acr}\\b(?![^<]*>)`, 'g');
+    result = result.replace(re, glossaryLink(acr));
+  }
+  return result;
+}
+
+function categoryClass(cat: string): string {
+  switch (cat) {
+    case 'revenue': return 'bd-row-revenue';
+    case 'expense': return 'bd-row-expense';
+    case 'tax': return 'bd-row-tax';
+    case 'contribution': return 'bd-row-contribution';
+    case 'result': return 'bd-row-result';
+    case 'assumption': return 'bd-row-assumption';
+    case 'subtotal': return 'bd-row-subtotal';
+    case 'section-header': return 'bd-row-section-header';
+    default: return '';
+  }
+}
+
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function stepsToJson(steps: FormulaStep[] | undefined): string {
+  if (!steps || steps.length === 0) return '';
+  return escapeAttr(JSON.stringify(steps));
+}
+
+function renderBreakdownTable(rows: MonthlyBreakdownRow[], fxRate: number): string {
+  const headerCells = MONTH_HEADERS.map(m => `<th>${m}</th>`).join('');
+  const totalCols = 14; // label + 12 months + annual
+
+  const bodyRows = rows.map(row => {
+    // Section header row — spans all columns
+    if (row.category === 'section-header') {
+      return `<tr class="bd-row-section-header">
+        <td colspan="${totalCols}" class="bd-section-label">${row.label}</td>
+      </tr>`;
+    }
+
+    const isResult = row.category === 'result';
+    const isSubtotal = row.category === 'subtotal';
+    const rateTag = row.rate ? `<span class="bd-rate">${row.rate}</span>` : '';
+    const tip = row.tooltip ? tooltipHtml(row.tooltip) : '';
+
+    // Structured formula steps for monthly and annual cells
+    const monthlyStepsAttr = row.monthlyFormula ? ` data-formula-steps="${stepsToJson(row.monthlyFormula)}"` : '';
+    const annualStepsAttr = row.annualFormula ? ` data-formula-steps="${stepsToJson(row.annualFormula)}"` : '';
+
+    // Fallback: legacy formulaDetails as plain text
+    const fallbackAttr = (!row.monthlyFormula && row.formulaDetails) ? ` data-formula="${escapeAttr(row.formulaDetails)}"` : '';
+    const fallbackAnnualAttr = (!row.annualFormula && row.formulaDetails) ? ` data-formula="${escapeAttr(row.formulaDetails)}"` : '';
+
+    const monthlyCells = row.values.map(v => {
+      const absV = Math.abs(v);
+      const display = v === 0 ? '<span class="bd-zero">—</span>' : `<span class="${v < 0 ? 'bd-neg' : ''}">${v < 0 ? '−' : ''}€${Math.round(absV).toLocaleString('en-US')}</span>`;
+      return `<td class="bd-cell-numeric"${monthlyStepsAttr || fallbackAttr}>${display}</td>`;
+    }).join('');
+
+    const absAnnual = Math.abs(row.annual);
+    const annualDisplay = row.annual === 0
+      ? '<span class="bd-zero">—</span>'
+      : `<span class="${row.annual < 0 ? 'bd-neg' : ''}">${row.annual < 0 ? '−' : ''}€${Math.round(absAnnual).toLocaleString('en-US')}</span>`;
+    const annualRon = `<span class="bd-ron">${formatRon(Math.abs(row.annual) * fxRate)}</span>`;
+
+    return `<tr class="${categoryClass(row.category)}${isResult ? ' bd-row-highlight' : ''}${isSubtotal ? ' bd-row-subtotal-highlight' : ''}">
+      <td class="bd-label">${linkAcronyms(row.label)} ${rateTag} ${tip}</td>
+      ${monthlyCells}
+      <td class="bd-annual bd-cell-numeric"${annualStepsAttr || fallbackAnnualAttr}>${annualDisplay}<br>${annualRon}</td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="breakdown-table-wrap">
+      <table class="breakdown-table">
+        <thead>
+          <tr>
+            <th class="bd-label-head">Item</th>
+            ${headerCells}
+            <th class="bd-annual-head">Annual</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${bodyRows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+export function renderScenarioSummary(
+  container: HTMLElement,
+  inputs: SimulatorInputs,
+  results: SimulationResult[],
+): void {
+  const rev = results[0]?.revenue;
+  if (!rev) { container.innerHTML = ''; return; }
+
+  const expenses = results[0].structureType === 'SRL'
+    ? (results[0] as SrlResult).annualOperatingExpenses
+    : (results[0] as PfaIiResult).annualDeductibleExpenses;
+
+  container.innerHTML = `
+    <div class="scenario-summary-card card">
+      <h3 class="scenario-title">Scenario Summary</h3>
+      <div class="scenario-grid">
+        <div class="scenario-item">
+          <span class="scenario-label">Gross annual revenue</span>
+          <span class="scenario-value">${formatDual(rev.annualTotalRevenue, inputs.fxEurToRon)}</span>
+        </div>
+        <div class="scenario-item">
+          <span class="scenario-label">Deductible expenses</span>
+          <span class="scenario-value">${formatDual(expenses, inputs.fxEurToRon)}</span>
+        </div>
+        <div class="scenario-item">
+          <span class="scenario-label">EUR → RON rate</span>
+          <span class="scenario-value">${inputs.fxEurToRon.toFixed(4)}</span>
+        </div>
+        <div class="scenario-item">
+          <span class="scenario-label">Tax year</span>
+          <span class="scenario-value">${inputs.taxYear}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderBestScenario(
+  container: HTMLElement,
+  comparison: ComparisonResult,
+): void {
+  const best = comparison.results.find(r => r.structureType === comparison.bestPersonalNet);
+  if (!best) { container.innerHTML = ''; return; }
+
+  const worst = comparison.results.find(r => r.structureType === comparison.worstPersonalNet);
+  const deltaMonthly = worst ? Math.round((best.annualNetPersonalCash - worst.annualNetPersonalCash) / 12) : 0;
+
+  container.innerHTML = `
+    <div class="best-scenario-card card">
+      <div class="best-scenario-inner">
+        <div class="best-scenario-main">
+          <span class="best-scenario-label">Best current option</span>
+          <span class="best-scenario-structure">${best.structureType}</span>
+        </div>
+        <div class="best-scenario-stats">
+          <div class="best-scenario-stat">
+            <span class="best-scenario-stat-value">${formatEur(best.annualNetPersonalCash)}</span>
+            <span class="best-scenario-stat-label">annual personal net</span>
+          </div>
+          <div class="best-scenario-stat">
+            <span class="best-scenario-stat-value">${formatEur(best.monthlyNetPersonalCash)}</span>
+            <span class="best-scenario-stat-label">per month</span>
+          </div>
+          ${deltaMonthly > 0 ? `
+          <div class="best-scenario-stat">
+            <span class="best-scenario-stat-value best-scenario-delta">+${formatEur(deltaMonthly)}/mo</span>
+            <span class="best-scenario-stat-label">vs ${comparison.worstPersonalNet}</span>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderComparisonCards(
+  results: SimulationResult[],
+  comparison: ComparisonResult,
+  container: HTMLElement,
+  fxRate: number,
+): void {
+  container.innerHTML = '';
+
+  for (const result of results) {
+    const isBest = result.structureType === comparison.bestPersonalNet;
+    const card = document.createElement('div');
+    card.className = `result-card${isBest ? ' best' : ''}`;
+
+    const badges: string[] = [];
+    if (isBest) {
+      badges.push(`<span class="result-badge badge-best">Best net</span>`);
+      if (comparison.bestVsWorstMonthly > 0) {
+        badges.push(`<span class="result-badge badge-delta">+${formatEur(comparison.bestVsWorstMonthly)}/mo vs ${comparison.worstPersonalNet}</span>`);
+      }
+    }
+    if (result.structureType === 'PFA') badges.push('<span class="result-badge badge-simple">Simplest</span>');
+    if (result.structureType === comparison.bestEffectiveRate && result.structureType !== comparison.bestPersonalNet) {
+      badges.push('<span class="result-badge badge-rate">Best rate</span>');
+    }
+
+    card.innerHTML = `
+      <div class="result-card-header">
+        <span class="result-structure-name">${glossaryLink(result.structureType)}</span>
+        <div class="result-badges">${badges.join(' ')}</div>
+      </div>
+      <div class="result-hero">
+        <div class="result-hero-label">Annual net personal cash</div>
+        <div class="result-hero-value">${formatEur(result.annualNetPersonalCash)}</div>
+        <div class="result-hero-ron">${formatRon(result.annualNetPersonalCash * fxRate)}</div>
+        <div class="result-hero-sub">${formatEur(result.monthlyNetPersonalCash)} / month</div>
+      </div>
+      <div class="result-rows">
+        <div class="result-row subtotal"><span class="result-row-label">Total taxes &amp; contributions</span><span class="result-row-value">${formatDual(result.totalTaxesContributions, fxRate)}</span></div>
+        <div class="result-row highlight-row"><span class="result-row-label">Effective tax rate</span><span class="result-row-value">${formatPct(result.effectiveTaxRate)}</span></div>
+      </div>
+      <details class="result-details breakdown-details">
+        <summary>Detailed monthly breakdown</summary>
+        ${renderBreakdownTable(result.monthlyBreakdown.rows, fxRate)}
+      </details>
+    `;
+
+    container.appendChild(card);
+  }
+
+  // Accordion behavior: only one breakdown open at a time
+  const allDetails = container.querySelectorAll<HTMLDetailsElement>('details.breakdown-details');
+  allDetails.forEach(detail => {
+    detail.addEventListener('toggle', () => {
+      if (detail.open) {
+        allDetails.forEach(other => {
+          if (other !== detail && other.open) other.open = false;
+        });
+      }
+    });
+  });
+
+  // Cell formula tooltip system
+  initCellFormulaTooltips(container);
+}
+
+function initCellFormulaTooltips(container: HTMLElement): void {
+  // Create shared tooltip element on body to avoid clipping
+  let popup = document.querySelector('.cell-formula-popup') as HTMLElement | null;
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.className = 'cell-formula-popup';
+    popup.setAttribute('role', 'tooltip');
+    document.body.appendChild(popup);
+  }
+
+  let activeCell: HTMLElement | null = null;
+
+  function renderSteps(steps: FormulaStep[]): string {
+    return `<div class="formula-ledger">${steps.map(step => {
+      const cls = `formula-step formula-step-${step.type}`;
+      const amountHtml = step.amount ? `<span class="formula-step-amount">${step.amount}</span>` : '';
+      return `<div class="${cls}"><span class="formula-step-label">${step.label}</span>${amountHtml}</div>`;
+    }).join('')}</div>`;
+  }
+
+  function showPopup(cell: HTMLElement) {
+    if (!popup) return;
+
+    // Try structured steps first, then fall back to plain formula
+    const stepsJson = cell.getAttribute('data-formula-steps');
+    const plainFormula = cell.getAttribute('data-formula');
+
+    if (stepsJson) {
+      try {
+        const steps: FormulaStep[] = JSON.parse(stepsJson);
+        popup.innerHTML = renderSteps(steps);
+      } catch {
+        popup.textContent = stepsJson;
+      }
+    } else if (plainFormula) {
+      popup.textContent = plainFormula;
+    } else {
+      return;
+    }
+
+    popup.classList.add('visible');
+    activeCell = cell;
+    cell.classList.add('bd-cell-active');
+
+    // Position using fixed coordinates relative to viewport
+    const cellRect = cell.getBoundingClientRect();
+    popup.style.left = `${cellRect.left + cellRect.width / 2}px`;
+    popup.style.top = `${cellRect.top - 8}px`;
+  }
+
+  function hidePopup() {
+    if (!popup) return;
+    popup.classList.remove('visible');
+    if (activeCell) {
+      activeCell.classList.remove('bd-cell-active');
+      activeCell = null;
+    }
+  }
+
+  const cellSelector = '.bd-cell-numeric[data-formula-steps], .bd-cell-numeric[data-formula]';
+
+  // Delegate events on the container
+  container.addEventListener('mouseenter', (e) => {
+    const cell = (e.target as HTMLElement).closest(cellSelector) as HTMLElement | null;
+    if (cell) showPopup(cell);
+  }, true);
+
+  container.addEventListener('mouseleave', (e) => {
+    const cell = (e.target as HTMLElement).closest(cellSelector) as HTMLElement | null;
+    if (cell) hidePopup();
+  }, true);
+
+  // Mobile: tap to show, tap elsewhere to dismiss
+  container.addEventListener('click', (e) => {
+    const cell = (e.target as HTMLElement).closest(cellSelector) as HTMLElement | null;
+    if (cell) {
+      if (activeCell === cell) {
+        hidePopup();
+      } else {
+        hidePopup();
+        showPopup(cell);
+      }
+    } else {
+      hidePopup();
+    }
+  });
+}
+
+export function renderRecommendations(
+  recommendations: Recommendation[],
+  container: HTMLElement,
+): void {
+  container.innerHTML = '';
+
+  for (let i = 0; i < recommendations.length; i++) {
+    const rec = recommendations[i];
+    const card = document.createElement('div');
+    card.className = `rec-card${i === 0 ? ' highlight' : ''}`;
+    card.innerHTML = `
+      <div class="rec-label">${rec.label}</div>
+      <div class="rec-structure">${rec.structureType}</div>
+      <div class="rec-reason">${rec.reason}</div>
+    `;
+    container.appendChild(card);
+  }
+}
+
+export function renderWarnings(warnings: Warning[], container: HTMLElement): void {
+  container.innerHTML = '';
+
+  const severityIcon: Record<string, string> = {
+    high: '🔴',
+    medium: '🟡',
+    low: '🔵',
+    info: 'ℹ️',
+  };
+
+  for (const w of warnings) {
+    const item = document.createElement('div');
+    item.className = `warning-item severity-${w.severity}`;
+    item.innerHTML = `
+      <span class="warning-icon">${severityIcon[w.severity] || 'ℹ️'}</span>
+      <div class="warning-body">
+        <div class="warning-title">${w.title}</div>
+        <div class="warning-message">${w.message}</div>
+        <div class="warning-applies">
+          ${w.appliesTo.map(s => `<span class="warning-tag">${s}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    container.appendChild(item);
+  }
+}

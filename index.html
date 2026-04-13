@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romania B2B Income Simulator</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">RO<span class="logo-accent">sim</span></a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link active">Simulator</a>
+        <a href="/structures.html" class="nav-link">Structures Guide</a>
+        <a href="/glossary.html" class="nav-link">Glossary</a>
+        <a href="/about.html" class="nav-link">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <section class="intro">
+      <h1>Income Simulator for Romania IT Contractors</h1>
+      <p class="intro-sub">Compare PFA, II, IF, and SRL structures — see your estimated net income, taxes, and key warnings.</p>
+      <p class="disclaimer">This is an estimation tool, not legal or tax advice. Always consult a qualified accountant for your specific situation.</p>
+    </section>
+
+    <!-- ─── INPUT PANEL ─── -->
+    <section class="simulator-layout">
+      <div class="input-panel">
+
+        <!-- ══ A. INCOME ══ -->
+        <details class="input-section card" open>
+          <summary class="section-heading section-toggle">
+            <span class="section-icon">💰</span> Income
+            <span class="toggle-indicator">▸</span>
+          </summary>
+          <div class="section-body">
+          <p class="section-desc">Your expected professional revenue before taxes.</p>
+
+          <div class="input-group">
+            <label class="input-label" for="dailyRate">
+              Daily rate / TJM
+              <span class="input-unit">EUR</span>
+            </label>
+            <input type="number" id="dailyRate" class="input-field" value="300" min="0" step="10" />
+            <span class="input-hint">Your standard invoiced day rate</span>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="billableDays">
+              Billable days
+              <span class="input-unit" id="billableDaysUnit">/ month</span>
+            </label>
+            <div class="field-with-toggle">
+              <input type="number" id="billableDays" class="input-field" value="20" min="0" step="1" />
+              <div class="segmented-control" id="billableDaysToggle">
+                <button type="button" class="seg-btn active" data-value="monthly">Monthly</button>
+                <button type="button" class="seg-btn" data-value="yearly">Yearly</button>
+              </div>
+            </div>
+            <span class="input-hint" id="billableDaysHint">Working days you invoice each month</span>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="otherIncome">
+              Other income
+              <span class="input-unit">EUR <span id="otherIncomeUnit">/ month</span></span>
+            </label>
+            <div class="field-with-toggle">
+              <input type="number" id="otherIncome" class="input-field" value="0" min="0" step="100" />
+              <div class="segmented-control" id="otherIncomeToggle">
+                <button type="button" class="seg-btn active" data-value="monthly">Monthly</button>
+                <button type="button" class="seg-btn" data-value="yearly">Yearly</button>
+              </div>
+            </div>
+            <span class="input-hint">App revenue, software products, side projects, other professional income</span>
+          </div>
+          </div>
+        </details>
+
+        <!-- ══ B. EXPENSES ══ -->
+        <details class="input-section card" open>
+          <summary class="section-heading section-toggle">
+            <span class="section-icon">📤</span> Business Expenses
+            <span class="toggle-indicator">▸</span>
+          </summary>
+          <div class="section-body">
+          <p class="section-desc">Deductible operating costs that reduce your taxable income when applicable. Examples: accountant fees, software subscriptions, coworking/office rent, hardware, travel, professional insurance. For PFA/II, these directly reduce your taxable base. For SRL micro, expenses do not reduce the 1% turnover tax but still affect profit available for distribution.</p>
+
+          <div class="input-group">
+            <label class="input-label" for="expenseMode">How do you estimate expenses?</label>
+            <select id="expenseMode" class="input-field">
+              <option value="percent">As a % of total revenue</option>
+              <option value="fixed">As a fixed annual amount (EUR)</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="expenseValue" id="expenseValueLabel">Expense rate</label>
+            <input type="number" id="expenseValue" class="input-field" value="10" min="0" step="1" />
+            <span class="input-hint" id="expenseHint">% of your total gross revenue — covers tools, accountant, subscriptions, etc.</span>
+          </div>
+          </div>
+        </details>
+
+        <!-- ══ C. TAX & SOCIAL ASSUMPTIONS ══ -->
+        <details class="input-section card" id="taxAssumptions">
+          <summary class="section-heading section-toggle">
+            <span class="section-icon">🏛️</span> Tax &amp; Social Assumptions
+            <span class="toggle-indicator">▸</span>
+          </summary>
+          <div class="section-body">
+            <p class="section-desc">Exchange rates, minimum wage, and health/pension coverage assumptions. Defaults are pre-filled for 2026.</p>
+
+            <div class="input-group">
+              <label class="input-label" for="fxRate">
+                EUR → RON exchange rate
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">Average exchange rate used to convert EUR income to RON for Romanian tax threshold calculations.</span></span>
+              </label>
+              <div class="field-with-action">
+                <input type="number" id="fxRate" class="input-field" value="4.98" min="0" step="0.01" />
+                <button type="button" id="fetchFxBtn" class="btn-icon" title="Fetch live ECB rate">
+                  <span class="btn-icon-label">↻ Live</span>
+                </button>
+              </div>
+              <span class="input-hint" id="fxHint">Manual override — or click "Live" to fetch the latest ECB reference rate</span>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="fxClosePrev">
+                EUR → RON (previous year close)
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">The official EUR/RON rate at the close of the previous fiscal year. Used for certain threshold conversions (e.g., micro turnover cap).</span></span>
+              </label>
+              <input type="number" id="fxClosePrev" class="input-field" value="4.9756" min="0" step="0.0001" />
+            </div>
+
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" for="taxYear">Tax year</label>
+                <input type="number" id="taxYear" class="input-field" value="2026" min="2025" max="2030" />
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="minWage">
+                  Gross minimum wage
+                  <span class="input-unit">RON / month</span>
+                </label>
+                <input type="number" id="minWage" class="input-field" value="4050" min="0" step="50" />
+                <span class="input-hint">Used to compute CAS/CASS thresholds</span>
+              </div>
+            </div>
+
+            <div class="input-group checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cassException" />
+                <span class="checkbox-text">
+                  Health insurance exception (CASS)
+                  <span class="info-trigger" tabindex="0">?<span class="info-popup">Check this if you are already covered for health insurance through another source (e.g., salaried employment above the threshold). This exempts you from the CASS minimum base top-up for independent income.</span></span>
+                </span>
+              </label>
+              <span class="input-hint">Applies if you already pay CASS via a salary or other qualifying coverage</span>
+            </div>
+          </div>
+        </details>
+
+        <!-- ══ D. SRL-SPECIFIC SETTINGS ══ -->
+        <details class="input-section card" id="srlOptions">
+          <summary class="section-heading section-toggle">
+            <span class="section-icon">🏢</span> SRL Payout Settings
+            <span class="toggle-indicator">▸</span>
+          </summary>
+          <div class="section-body">
+            <p class="section-desc">How you extract money from your SRL: salary, dividends, or both. Affects personal tax, company cash, and timing.</p>
+
+            <div class="input-group">
+              <label class="input-label" for="srlRegime">
+                Company tax regime
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">Micro: 1% flat tax on revenue (if turnover ≤ €100k). Profit tax: 16% on net profit — better if you have high deductible expenses.</span></span>
+              </label>
+              <select id="srlRegime" class="input-field">
+                <option value="micro">Micro enterprise (1% of revenue)</option>
+                <option value="profit_tax">Profit tax (16% on net profit)</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="salaryStrategy">
+                Owner monthly gross salary
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">Monthly salary the SRL pays you. Minimum salary is the most common approach for micro SRLs (satisfies the employee requirement). Custom lets you set any amount. Salary is taxed with CAS+CASS+PIT but counts as a company expense.</span></span>
+              </label>
+              <select id="salaryStrategy" class="input-field">
+                <option value="minimum_salary">Minimum wage</option>
+                <option value="custom_salary">Custom amount</option>
+                <option value="no_salary">No salary</option>
+              </select>
+            </div>
+
+            <div class="input-group" id="customSalaryGroup" style="display:none;">
+              <label class="input-label" for="grossSalary">
+                Custom gross salary
+                <span class="input-unit">EUR / month</span>
+              </label>
+              <input type="number" id="grossSalary" class="input-field" value="500" min="0" step="50" />
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="dividendTiming">
+                Dividend timing
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">When dividends are distributed to you from company profit. Quarterly: paid every 3 months (Mar, Jun, Sep, Dec). Annual: single payment in December. None: all profit stays in the company.</span></span>
+              </label>
+              <select id="dividendTiming" class="input-field">
+                <option value="quarterly">Quarterly distributions</option>
+                <option value="annual">Annual distribution</option>
+                <option value="none">None — retain all in company</option>
+              </select>
+            </div>
+
+            <div class="input-group" id="retainedProfitGroup">
+              <label class="input-label" for="retainedProfit">
+                Retain % of post-tax company cash
+                <span class="input-unit">%</span>
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">Percentage of company cash kept in the SRL after operations and tax. The rest is distributed as dividends. Useful for reinvestment or building a cash reserve.</span></span>
+              </label>
+              <input type="number" id="retainedProfit" class="input-field" value="0" min="0" max="100" step="5" />
+            </div>
+          </div>
+        </details>
+
+        <button id="simulateBtn" class="btn btn-primary">Compare All Structures</button>
+      </div>
+
+      <!-- ─── RESULTS ─── -->
+      <div class="results-area">
+        <!-- Shared Scenario Summary -->
+        <div id="scenarioSummary" class="scenario-summary" style="display:none;"></div>
+
+        <!-- Best Scenario Card -->
+        <div id="bestScenarioSection" class="best-scenario-section" style="display:none;"></div>
+
+        <!-- Recommendations -->
+        <div id="recommendationsSection" class="recommendations-section" style="display:none;">
+          <h2 class="panel-title">Recommendations</h2>
+          <div id="recommendationCards" class="recommendation-cards"></div>
+        </div>
+
+        <!-- Monthly Chart -->
+        <div id="chartSection" class="chart-section" style="display:none;">
+          <h2 class="panel-title">Cumulative Personal Cash Over the Year</h2>
+          <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Comparison Cards -->
+        <div id="comparisonSection" class="comparison-section" style="display:none;">
+          <h2 class="panel-title">Comparison</h2>
+          <div id="comparisonCards" class="comparison-grid"></div>
+        </div>
+
+        <!-- Warnings -->
+        <div id="warningsSection" class="warnings-section" style="display:none;">
+          <h2 class="panel-title">Warnings &amp; Thresholds</h2>
+          <div id="warningsList" class="warnings-list"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">📊</div>
+          <p>Enter your income details and click "Compare All Structures" to see results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Constants Panel -->
+    <section class="constants-section" id="constantsSection">
+      <details>
+        <summary class="constants-toggle">
+          <h2 class="panel-title inline-title">Constants &amp; Sources</h2>
+          <span class="toggle-hint">View all tax constants used in calculations</span>
+        </summary>
+        <div id="constantsTable" class="constants-table-wrap"></div>
+      </details>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>Data last verified: April 2026 · Sources: ANAF official materials, Romanian Fiscal Code</p>
+        <p class="footer-links">
+          <a href="/structures.html">Structures Guide</a>
+          <span class="footer-dot">·</span>
+          <a href="/about.html">About</a>
+          <span class="footer-dot">·</span>
+          <a href="https://www.linkedin.com/in/alexis-chupin" target="_blank" rel="noopener noreferrer">Created by Alexis</a>
+        </p>
+        <p class="footer-note">This is an estimation tool, not legal or tax advice. Results depend on assumptions and simplified models.</p>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

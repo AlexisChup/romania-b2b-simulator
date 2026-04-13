@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Romania B2B Income Simulator</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">RO<span class="logo-accent">sim</span></a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Simulator</a>
+        <a href="/structures.html" class="nav-link">Structures Guide</a>
+        <a href="/glossary.html" class="nav-link">Glossary</a>
+        <a href="/about.html" class="nav-link active">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="about-content">
+      <h1>About this simulator</h1>
+
+      <p>
+        Romania offers several legal structures for independent IT contractors and freelancers —
+        PFA, II, IF, and SRL — each with different tax rules, contribution thresholds, and trade-offs.
+        Choosing between them is surprisingly hard, especially for foreigners working in Romania
+        or Romanians returning from abroad.
+      </p>
+
+      <h2>Why this exists</h2>
+      <p>
+        Tax comparison tools for Romanian structures are rare, and most available information
+        is scattered across accounting blogs, Facebook groups, and outdated forums.
+        This simulator aims to bring clarity by letting you compare all major structures
+        side-by-side with transparent, inspectable calculations.
+      </p>
+
+      <h2>How it works</h2>
+      <p>
+        The simulator uses publicly available tax rates, contribution thresholds, and rules
+        from ANAF (the Romanian tax authority) and the Romanian Fiscal Code. All constants
+        are sourced and marked with confidence levels.
+      </p>
+      <p>
+        Every result is assumption-driven. The simulator does not know your personal situation —
+        it models scenarios based on what you enter. You can inspect the full breakdown,
+        see which rules apply, and verify the logic yourself.
+      </p>
+
+      <h2>What this is not</h2>
+      <p>
+        This is <strong>not</strong> legal or tax advice. It is an estimation tool designed to help
+        you understand the landscape and ask better questions when consulting a qualified
+        Romanian accountant or tax advisor.
+      </p>
+      <p>
+        Some simplifications are made: VAT is treated as a warning only, quarterly dividend
+        timing is modeled as an assumption, and certain edge cases (multiple CAEN codes,
+        linked enterprises, part-year scenarios) are not covered.
+      </p>
+
+      <h2>Who made this</h2>
+      <p>
+        Built by <a href="https://www.linkedin.com/in/alexis-chupin" target="_blank" rel="noopener noreferrer">Alexis</a>
+        as an open tool for the Romanian IT contractor community.
+        Feedback and corrections are welcome.
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Data last verified: April 2026 · Sources: ANAF official materials, Romanian Fiscal Code</p>
+      <p class="footer-links">
+        <a href="/">Simulator</a>
+        <span class="footer-dot">·</span>
+        <a href="/structures.html">Structures Guide</a>
+        <span class="footer-dot">·</span>
+        <a href="https://www.linkedin.com/in/alexis-chupin" target="_blank" rel="noopener noreferrer">Created by Alexis</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

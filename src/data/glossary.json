@@ -1,0 +1,124 @@
+{
+  "categories": [
+    {
+      "id": "structures",
+      "label": "Legal Structures",
+      "terms": [
+        {
+          "id": "pfa",
+          "acronym": "PFA",
+          "fullName": "Persoană Fizică Autorizată",
+          "description": "Authorized natural person — the simplest sole trader structure for independent activities in Romania. Personal liability, no separate legal entity."
+        },
+        {
+          "id": "ii",
+          "acronym": "II",
+          "fullName": "Întreprindere Individuală",
+          "description": "Individual enterprise — similar to PFA but with patrimony separation. Still one owner, but the business assets can be separated from personal ones."
+        },
+        {
+          "id": "if",
+          "acronym": "IF",
+          "fullName": "Întreprindere Familială",
+          "description": "Family enterprise — a structure allowing family members to jointly operate a business. Income is split among members according to agreed shares."
+        },
+        {
+          "id": "srl",
+          "acronym": "SRL",
+          "fullName": "Societate cu Răspundere Limitată",
+          "description": "Limited liability company — a separate legal entity. The owner's personal assets are protected. Can pay salary and/or dividends to the owner."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "label": "Taxes & Contributions",
+      "terms": [
+        {
+          "id": "cas",
+          "acronym": "CAS",
+          "fullName": "Contribuția de Asigurări Sociale",
+          "description": "Social insurance contribution (pension). Mandatory for individuals earning above certain thresholds. Rate: 25% on the applicable base."
+        },
+        {
+          "id": "cass",
+          "acronym": "CASS",
+          "fullName": "Contribuția de Asigurări Sociale de Sănătate",
+          "description": "Health insurance contribution. Mandatory for most earners. Rate: 10% on the applicable base, with minimum and maximum thresholds."
+        },
+        {
+          "id": "pit",
+          "acronym": "PIT",
+          "fullName": "Personal Income Tax",
+          "description": "Tax on personal income (impozit pe venit). Flat rate of 10% applied to taxable income after deductions."
+        },
+        {
+          "id": "cit",
+          "acronym": "CIT",
+          "fullName": "Corporate Income Tax",
+          "description": "Profit tax for companies on the standard regime. Rate: 16% of net profit."
+        },
+        {
+          "id": "cam",
+          "acronym": "CAM",
+          "fullName": "Contribuția Asiguratorie pentru Muncă",
+          "description": "Work insurance contribution paid by the employer. Rate: 2.25% of the employee's gross salary."
+        },
+        {
+          "id": "vat",
+          "acronym": "VAT",
+          "fullName": "Value Added Tax (TVA)",
+          "description": "Consumption tax on goods and services. Registration is mandatory above a turnover threshold (currently 300,000 RON). Standard rate: 19%."
+        }
+      ]
+    },
+    {
+      "id": "salary",
+      "label": "Payroll & Salary",
+      "terms": [
+        {
+          "id": "gross-salary",
+          "acronym": "Gross salary",
+          "fullName": "Salariu brut",
+          "description": "Total salary before any deductions (CAS, CASS, PIT). The base for calculating employee contributions."
+        },
+        {
+          "id": "net-salary",
+          "acronym": "Net salary",
+          "fullName": "Salariu net",
+          "description": "Take-home pay after all employee-side deductions (CAS, CASS, PIT) are subtracted from gross salary."
+        },
+        {
+          "id": "dividend",
+          "acronym": "Dividend",
+          "fullName": "Dividend",
+          "description": "Distribution of company profit to shareholders. Subject to dividend withholding tax (16%) and potentially CASS."
+        }
+      ]
+    },
+    {
+      "id": "thresholds",
+      "label": "Constants & Thresholds",
+      "terms": [
+        {
+          "id": "mw",
+          "acronym": "MW",
+          "fullName": "Minimum Wage (Salariul Minim Brut)",
+          "description": "The gross minimum wage set by the government. Used as a reference for contribution thresholds (e.g., CAS base is 12× or 24×MW)."
+        },
+        {
+          "id": "micro",
+          "acronym": "Micro",
+          "fullName": "Micro-enterprise tax regime",
+          "description": "A simplified tax regime for SRLs with revenue under €100,000/year. Tax is 1% of total revenue (not profit), regardless of expenses."
+        },
+        {
+          "id": "fx",
+          "acronym": "FX",
+          "fullName": "Foreign Exchange Rate",
+          "description": "The EUR/RON exchange rate used for converting between currencies. Tax calculations use RON, but this simulator shows results in EUR."
+        }
+      ]
+    }
+  ]
+}
