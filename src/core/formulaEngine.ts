@@ -1031,6 +1031,9 @@ export function simulate(inputs: SimulatorInputs): SimulationResult {
 }
 
 export function simulateAll(baseInputs: SimulatorInputs): SimulationResult[] {
-  const structures = ['PFA', 'II', 'IF', 'SRL'] as const;
-  return structures.map(s => simulate({ ...baseInputs, structureType: s }));
+  // PFA and II use the same tax engine — merge into one "PFA / II" result.
+  // IF is not meaningful for solo mode — excluded from default comparison.
+  const pfaIi = computePfaIi({ ...baseInputs, structureType: 'PFA' });
+  const srl = computeSrl({ ...baseInputs, structureType: 'SRL' });
+  return [pfaIi, srl];
 }

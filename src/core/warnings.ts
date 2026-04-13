@@ -44,7 +44,7 @@ export function generateWarnings(inputs: SimulatorInputs, results: SimulationRes
       severity: 'high',
       title: 'VAT registration required',
       message: `Annual turnover (${Math.round(revenueRon).toLocaleString()} RON) exceeds the VAT exemption threshold of 395,000 RON. VAT registration is required by the 10th of the following month.`,
-      appliesTo: ['PFA', 'II', 'IF', 'SRL'],
+      appliesTo: ['PFA', 'SRL'],
     });
   } else if (revenueRon > TAX.vatExemptionThresholdRon * 0.85) {
     warnings.push({
@@ -52,7 +52,7 @@ export function generateWarnings(inputs: SimulatorInputs, results: SimulationRes
       severity: 'medium',
       title: 'Approaching VAT threshold',
       message: `Annual turnover (${Math.round(revenueRon).toLocaleString()} RON) is nearing the 395,000 RON VAT exemption threshold.`,
-      appliesTo: ['PFA', 'II', 'IF', 'SRL'],
+      appliesTo: ['PFA', 'SRL'],
     });
   }
 
@@ -82,26 +82,15 @@ export function generateWarnings(inputs: SimulatorInputs, results: SimulationRes
     severity: 'info',
     title: 'e-Factura compliance',
     message: 'B2B invoices must be transmitted via RO e-Factura within 5 days of issuance. Non-compliance can trigger a 15% penalty on the invoice total.',
-    appliesTo: ['PFA', 'II', 'IF', 'SRL'],
+    appliesTo: ['PFA', 'SRL'],
   });
 
-  // ─── IF solo warning ───
-  if (inputs.structureType === 'IF' || results.some(r => r.structureType === 'IF')) {
-    warnings.push({
-      id: 'if_not_solo',
-      severity: 'medium',
-      title: 'IF requires family members',
-      message: 'A family enterprise (IF) requires at least 2 family members and cannot hire employees. Not suitable for solo IT contractors.',
-      appliesTo: ['IF'],
-    });
-  }
-
-  // ─── PFA structural limits ───
+  // ─── PFA / II structural limits ───
   warnings.push({
     id: 'pfa_limits',
     severity: 'info',
-    title: 'PFA structural limits',
-    message: 'PFA is limited to 5 CAEN activity classes and 3 employees. Consider II or SRL if you need more.',
+    title: 'PFA / II structural limits',
+    message: 'PFA is limited to 5 CAEN classes and 3 employees. II allows up to 10 CAEN classes and 8 employees. Consider SRL if you need more.',
     appliesTo: ['PFA'],
   });
 
@@ -114,7 +103,7 @@ export function generateWarnings(inputs: SimulatorInputs, results: SimulationRes
       severity: 'info',
       title: 'CASS cap reached',
       message: `Net income exceeds the CASS cap of 72 minimum wages (${Math.round(mw72).toLocaleString()} RON). CASS contribution is capped.`,
-      appliesTo: ['PFA', 'II'],
+      appliesTo: ['PFA'],
     });
   }
 

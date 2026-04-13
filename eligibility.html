@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eligibility Simulator — Romania B2B Income Simulator</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">RO<span class="logo-accent">sim</span></a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Simulator</a>
+        <a href="/eligibility.html" class="nav-link active">Eligibility</a>
+        <a href="/structures.html" class="nav-link">Structures Guide</a>
+        <a href="/glossary.html" class="nav-link">Glossary</a>
+        <a href="/about.html" class="nav-link">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <section class="intro">
+      <h1>Eligibility Simulator</h1>
+      <p class="intro-sub">Find out which Romanian business structures are compatible with your intended setup — before thinking about taxes.</p>
+      <p class="disclaimer">This checks structural fit, not financial outcome. Use the <a href="/">Income Simulator</a> for tax comparisons.</p>
+    </section>
+
+    <section class="input-panel card">
+      <h2 class="input-section-title">Your Setup</h2>
+
+      <div class="input-group">
+        <label class="input-label">Operating mode</label>
+        <div class="seg-control" id="soloToggle">
+          <button class="seg-btn active" data-value="solo">Solo</button>
+          <button class="seg-btn" data-value="family">Family</button>
+        </div>
+        <span class="input-hint">Are you operating alone or with family members?</span>
+      </div>
+
+      <div class="input-group" id="familyMembersGroup" style="display:none;">
+        <label class="input-label" for="familyMembers">Family members involved</label>
+        <div class="input-row">
+          <input type="number" id="familyMembers" value="2" min="2" max="10" step="1" class="input-field" />
+          <span class="input-unit">members</span>
+        </div>
+        <span class="input-hint">Total family members including yourself</span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="caenClasses">CAEN activity classes needed</label>
+        <div class="input-row">
+          <input type="number" id="caenClasses" value="1" min="1" max="50" step="1" class="input-field" />
+          <span class="input-unit">classes</span>
+        </div>
+        <span class="input-hint">How many different types of business activities do you plan to register?</span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="plannedEmployees">Planned employees</label>
+        <div class="input-row">
+          <input type="number" id="plannedEmployees" value="0" min="0" max="100" step="1" class="input-field" />
+          <span class="input-unit">employees</span>
+        </div>
+        <span class="input-hint">Number of non-family third-party employees you plan to hire</span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Do you need limited liability?</label>
+        <div class="seg-control" id="liabilityToggle">
+          <button class="seg-btn" data-value="yes">Yes</button>
+          <button class="seg-btn active" data-value="no">No / Not sure</button>
+        </div>
+        <span class="input-hint">Limited liability protects your personal assets from business debts</span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Do you want the simplest possible admin?</label>
+        <div class="seg-control" id="adminToggle">
+          <button class="seg-btn active" data-value="yes">Yes</button>
+          <button class="seg-btn" data-value="no">Not a priority</button>
+        </div>
+        <span class="input-hint">Simplest = single-entry bookkeeping, no mandatory accountant</span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Do you need to combine services + software products?</label>
+        <div class="seg-control" id="combineToggle">
+          <button class="seg-btn" data-value="yes">Yes</button>
+          <button class="seg-btn active" data-value="no">No / Just services</button>
+        </div>
+        <span class="input-hint">Multiple revenue streams may need additional CAEN classes</span>
+      </div>
+
+      <button id="evaluateBtn" class="simulate-btn">Check Eligibility</button>
+    </section>
+
+    <section id="eligibilityResults" class="eligibility-results" style="display:none;">
+      <div id="eligibilityCards" class="eligibility-cards"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 ROsim &mdash; Estimation tool, not legal or tax advice.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/eligibility-page.ts"></script>
+</body>
+</html>

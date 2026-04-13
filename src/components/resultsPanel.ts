@@ -9,7 +9,7 @@ function tooltipHtml(text: string): string {
 }
 
 // Known acronyms to link in breakdown labels
-const LINKABLE_ACRONYMS = ['CAS', 'CASS', 'PIT', 'CAM', 'VAT'];
+const LINKABLE_ACRONYMS = ['CAS', 'CASS', 'PIT', 'CAM', 'VAT', 'CAEN'];
 
 function linkAcronyms(text: string): string {
   // Replace whole-word acronyms with glossary links (avoid double-linking)
@@ -19,6 +19,17 @@ function linkAcronyms(text: string): string {
     result = result.replace(re, glossaryLink(acr));
   }
   return result;
+}
+
+/** Display name for comparison cards — PFA shows as "PFA / II" since they share the same tax engine */
+function displayName(structureType: string): string {
+  if (structureType === 'PFA') return `${glossaryLink('PFA')} / ${glossaryLink('II')}`;
+  return glossaryLink(structureType);
+}
+
+function displayNamePlain(structureType: string): string {
+  if (structureType === 'PFA') return 'PFA / II';
+  return structureType;
 }
 
 function categoryClass(cat: string): string {
@@ -158,7 +169,7 @@ export function renderBestScenario(
       <div class="best-scenario-inner">
         <div class="best-scenario-main">
           <span class="best-scenario-label">Best current option</span>
-          <span class="best-scenario-structure">${best.structureType}</span>
+          <span class="best-scenario-structure">${displayNamePlain(best.structureType)}</span>
         </div>
         <div class="best-scenario-stats">
           <div class="best-scenario-stat">
@@ -172,7 +183,7 @@ export function renderBestScenario(
           ${deltaMonthly > 0 ? `
           <div class="best-scenario-stat">
             <span class="best-scenario-stat-value best-scenario-delta">+${formatEur(deltaMonthly)}/mo</span>
-            <span class="best-scenario-stat-label">vs ${comparison.worstPersonalNet}</span>
+            <span class="best-scenario-stat-label">vs ${displayNamePlain(comparison.worstPersonalNet)}</span>
           </div>
           ` : ''}
         </div>
@@ -198,7 +209,7 @@ export function renderComparisonCards(
     if (isBest) {
       badges.push(`<span class="result-badge badge-best">Best net</span>`);
       if (comparison.bestVsWorstMonthly > 0) {
-        badges.push(`<span class="result-badge badge-delta">+${formatEur(comparison.bestVsWorstMonthly)}/mo vs ${comparison.worstPersonalNet}</span>`);
+        badges.push(`<span class="result-badge badge-delta">+${formatEur(comparison.bestVsWorstMonthly)}/mo vs ${displayNamePlain(comparison.worstPersonalNet)}</span>`);
       }
     }
     if (result.structureType === 'PFA') badges.push('<span class="result-badge badge-simple">Simplest</span>');
@@ -208,7 +219,7 @@ export function renderComparisonCards(
 
     card.innerHTML = `
       <div class="result-card-header">
-        <span class="result-structure-name">${glossaryLink(result.structureType)}</span>
+        <span class="result-structure-name">${displayName(result.structureType)}</span>
         <div class="result-badges">${badges.join(' ')}</div>
       </div>
       <div class="result-hero">

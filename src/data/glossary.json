@@ -117,6 +117,12 @@
           "acronym": "FX",
           "fullName": "Foreign Exchange Rate",
           "description": "The EUR/RON exchange rate used for converting between currencies. Tax calculations use RON, but this simulator shows results in EUR."
+        },
+        {
+          "id": "caen",
+          "acronym": "CAEN",
+          "fullName": "Clasificarea Activităților din Economia Națională",
+          "description": "The official Romanian classification code/category for an authorized business activity. Each structure type has limits on how many CAEN activity classes it can register (e.g., PFA allows up to 5, II allows up to 10, SRL has no limit)."
         }
       ]
     }

@@ -14,6 +14,12 @@ const COLORS: Record<string, string> = {
   SRL: '#059669',
 };
 
+/** Display name for chart legend — PFA shows as "PFA / II" */
+function chartLabel(structureType: string): string {
+  if (structureType === 'PFA') return 'PFA / II';
+  return structureType;
+}
+
 export function renderMonthlyChart(canvas: HTMLCanvasElement, results: SimulationResult[]): void {
   if (chartInstance) {
     chartInstance.destroy();
@@ -44,7 +50,7 @@ export function renderMonthlyChart(canvas: HTMLCanvasElement, results: Simulatio
     const color = COLORS[result.structureType] || '#888';
 
     datasets.push({
-      label: result.structureType,
+      label: chartLabel(result.structureType),
       data: cumulative,
       borderColor: color,
       backgroundColor: color + '10',

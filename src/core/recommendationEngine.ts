@@ -1,5 +1,11 @@
 import type { SimulationResult, Recommendation, StructureType, Warning } from './types';
 
+/** Display name — PFA shows as "PFA / II" since they share the same tax engine */
+function displayName(s: StructureType): string {
+  if (s === 'PFA' || s === 'II') return 'PFA / II';
+  return s;
+}
+
 export function generateRecommendations(
   results: SimulationResult[],
   warnings: Warning[],
@@ -21,7 +27,7 @@ export function generateRecommendations(
   recommendations.push({
     label: 'Highest personal net income',
     structureType: bestNet.structureType === 'IF' ? bestNet.structureType : bestNet.structureType,
-    reason: `${bestNet.structureType} yields the highest estimated annual personal cash (€${Math.round(bestNet.annualNetPersonalCash).toLocaleString()}).`,
+    reason: `${displayName(bestNet.structureType)} yields the highest estimated annual personal cash (€${Math.round(bestNet.annualNetPersonalCash).toLocaleString()}).`,
   });
 
   // Best effective tax rate
@@ -31,7 +37,7 @@ export function generateRecommendations(
     recommendations.push({
       label: 'Lowest effective tax rate',
       structureType: bestRate.structureType,
-      reason: `${bestRate.structureType} has the lowest effective tax rate (${(bestRate.effectiveTaxRate * 100).toFixed(1)}%).`,
+      reason: `${displayName(bestRate.structureType)} has the lowest effective tax rate (${(bestRate.effectiveTaxRate * 100).toFixed(1)}%).`,
     });
   }
 
@@ -82,7 +88,7 @@ export function generateRecommendations(
       recommendations.push({
         label: 'Close comparison',
         structureType: secondNet.structureType,
-        reason: `${bestNet.structureType} and ${secondNet.structureType} are within ${(diffPct * 100).toFixed(1)}% of each other. Consider non-tax factors (liability, admin complexity, flexibility).`,
+        reason: `${displayName(bestNet.structureType)} and ${displayName(secondNet.structureType)} are within ${(diffPct * 100).toFixed(1)}% of each other. Consider non-tax factors (liability, admin complexity, flexibility).`,
       });
     }
   }

@@ -1,194 +1,202 @@
-## Additional requirement: make cell-level explanations truly cell-specific, consistent, and more readable
+## Additional requirement: clarify CAEN in the glossary, simplify duplicate comparisons, and add an eligibility simulator
 
-The detailed monthly breakdown flow is already much better, but the cell-level explanation behavior still needs an important refinement.
+### 1. Add `CAEN` to the glossary / acronyms page
 
-### 1. Make every cell explanation consistent with the actual cell context
+The app uses the term `CAEN` / `CAEN activity classes`, and this must be explained clearly in the glossary.
 
-Right now, when hovering a numeric cell, the explanation is still too biased toward annual logic in some cases.
+Use a simple user-friendly definition such as:
+- `CAEN = the official Romanian classification code/category for an authorized business activity`
 
-I want the explanation to be tied to the **exact cell being inspected**.
+Make sure this appears in:
+- the Acronyms / Glossary page
+- any place where `CAEN` is used in the UI
+- any eligibility-related explanation where CAEN limits matter
 
-#### Required rule
-- If the hovered/tapped cell is a **monthly cell** (Jan, Feb, etc.), the explanation must be:
-  - expressed in **EUR**
-  - focused on the **monthly calculation for that exact month**
-- If the hovered/tapped cell is in the **annual column**, then the explanation can be:
-  - expressed in annual logic
-  - tied to the annual total for that row
-
-### Important consistency rule
-If the table cell is displayed in **EUR**, then the explanation for that cell must also be shown in **EUR**.
-Do not mix EUR and RON inside the cell explanation tooltip/popover unless there is a very strong reason to do so.
-
-Right now, this is not stable enough.
-The explanation layer must feel consistent and predictable.
+Do not assume the user knows this term.
 
 ---
 
-## 2. Cell explanations must describe the exact displayed value, not a generic annual formula
+### 2. Reassess whether PFA / II / IF really need separate financial comparison cards
 
-The user should feel that each tooltip/popover explains:
-- this exact row
-- this exact month (or annual total)
-- this exact displayed number
-
-Not a generic tax rule detached from the current cell.
-
-### Example
-If I inspect a monthly pension contribution cell, the explanation should show:
-- what monthly base was used
-- what rate was applied
-- any cap/threshold logic relevant to that monthly display
-- the final monthly result shown in the table
-
-It should not primarily explain the annual formula unless I am actually hovering the annual column.
-
----
-
-## 3. When constants are involved, explain them inside the cell detail
-
-In many cell explanations, some constants are used implicitly.
-For example:
-- minimum wage / MW
-- tax rates
-- caps
-- thresholds
-- reference values
-
-When a constant materially affects the result, I want the explanation tooltip/popover to include a small “constant context” section such as:
-- what this constant is
-- the actual value used in the current simulation
-- why it matters for this calculation
-
-Example spirit:
-- `Minimum wage used in this rule: €X / month`
-- `CASS rate used: 10%`
-- `Cap applied: ...`
-
-This should remain concise, but it must help the user understand what hidden assumptions are participating in the number.
-
----
-
-## 4. Multi-step cell explanations should be shown vertically like a mini ledger
-
-For larger or more complex calculations, I want the explanation to be displayed vertically, step by step, so the user can visually follow the arithmetic.
-
-For example, if a monthly amount is derived from several components:
-- start with the base
-- then show additions/subtractions line by line
-- then show the result
-
-This should feel like a compact mini-ledger or mini calculation bridge.
-
-### Example direction
-Something like:
-
-- Base monthly amount: €X
-- minus contribution A: -€Y
-- minus contribution B: -€Z
-- equals final monthly amount: €N
-
-### Visual semantics
-Use color semantics inside the explanation:
-- positive / retained / resulting amounts can be shown in **green**
-- deductions / taxes / subtractions can be shown in **red**
-- neutral bases/intermediate lines can stay neutral
-
-This is especially useful for rows such as:
-- owner net salary received
-- company cash after operations
-- salary-related taxes
-- dividend-related amounts
-- net personal cash
-
-The user should understand the arithmetic just by reading vertically.
-
----
-
-## 5. Preserve simplicity while increasing transparency
-
-The goal is not to create giant heavy tooltips.
-The goal is to create:
-- short
-- precise
-- cell-specific
-- vertically readable
-- trustworthy explanations
-
-This should make the detailed monthly breakdown feel extremely transparent without becoming visually overwhelming.
-
----
-
-## 6. Use the existing favicon asset where relevant
-
-In the `public` folder, there is a file named:
-
-- `favicon.png`
-
-Use this icon where it makes sense in the app and site experience, for example:
-- browser/site icon setup if needed
-- relevant branding spots in the UI if appropriate
-- any lightweight identity touchpoints already present
-
-Do not overuse it.
-Keep usage tasteful and minimal.
-
----
-
-## 7. Add an Acronyms page and link acronyms throughout the app
-
-This app uses many acronyms and shorthand terms that can be confusing:
-- SRL
+I want you to check whether the current simulation engine actually produces meaningfully different financial outputs for:
 - PFA
 - II
 - IF
-- CAS
-- CASS
-- PIT
-- MW
-- etc.
 
-I want a dedicated page for this, for example:
-- `Acronyms`
-or
-- `Glossary`
+### Important decision rule
+If PFA and II currently use the same tax engine and produce the same financial outputs under the current solo assumptions, then do NOT keep them as fully separate comparison cards just for the sake of it.
 
-### Requirements for this page
-Create a clean and simple page that:
-- explains each acronym in plain language
-- groups acronyms by category
-- keeps explanations concise and non-intimidating
+Instead:
+- merge them in the financial comparison layer into a shared result such as:
+  - `PFA / II`
+  - or `PFA + II`
+  - or another clear label indicating same tax outcome in the current scenario
 
-### Suggested categories
-Examples:
-- Legal structures
-- Taxes and contributions
-- Payroll / salary-related
-- Constants / thresholds / reference values
-- Other finance or simulator terms
+### Important nuance
+Even if they are merged in the financial comparison view, they should still remain distinct in:
+- the Structures Guide
+- the Glossary
+- the Eligibility Simulator
 
-### Linking behavior
-Whenever an acronym is used in the app UI, make it clickable (or otherwise clearly linkable) to the Acronyms page or to the relevant glossary anchor.
+Because their structural rules differ:
+- allowed CAEN classes
+- employee limits
+- operational scaling constraints
 
-This should be implemented consistently across the app, not manually in just one or two places.
+### IF handling
+For IF:
+- if the current simulator does not model family-member allocation inputs in a meaningful way
+- and if the current app is mainly optimized for a solo user
+then IF should not be displayed like a normal solo financial comparison option by default.
 
-Use a reusable pattern/component/helper if needed so acronym linking stays maintainable.
+Instead:
+- either hide IF from the default financial comparison
+- or show it as a special structure with a note like:
+  - `family structure / not standard for solo case`
 
-### UX goal
-The app should feel much safer for users who are new to Romanian contracting/tax language.
-If they see an acronym, they should be able to get help immediately.
+If later the app adds explicit family allocation inputs, then IF can become a more complete financial simulation path.
+
+### Goal
+Do not waste comparison space on structures that currently compute the same numbers.
+Simplify the UI where the engine is actually identical.
 
 ---
 
-## 8. Implementation note
+## 3. Add a new page: Eligibility Simulator
+
+I want a separate page in addition to the money simulator.
+
+This page should help the user understand:
+- which structures they are eligible for
+- which structures are not compatible with their intended setup
+- which structures are technically possible but constrained
+
+This is not an income simulator.
+It is an **eligibility / fit simulator**.
+
+### Main idea
+The page should ask structural / operational questions and then output something like:
+- Eligible
+- Conditionally eligible
+- Not suitable
+- Not eligible
+
+for each structure:
+- PFA
+- II
+- IF
+- SRL
+
+### Use the existing research documents
+Use the attached research documents as the source of truth for the structural rules.
+
+Do not rewrite the whole documents into the UI.
+Use them to derive clear rule-based logic.
+
+### Inputs for the Eligibility Simulator
+Design a simple but useful set of inputs, such as:
+
+- `Solo or family setup?`
+- `Number of family members involved`
+- `Desired number of CAEN activity classes`
+- `Planned number of employees`
+- `Need limited liability?`
+- `Want the simplest bookkeeping/admin?`
+- `Need to combine services + software products?`
+- `Need multiple clients?`
+- `Need to stay compatible with solo independent activity?`
+
+You may refine the exact list, but keep it focused and practical.
+
+### Outputs
+For each structure, return:
+- eligibility status
+- short explanation
+- main reason(s)
+- main constraint(s)
+- key next warning(s)
+
+### Example output style
+- `PFA: Not suitable if you need 6 CAEN classes`
+- `II: Eligible for 6 CAEN classes and 5 employees`
+- `IF: Not suitable for a solo setup`
+- `SRL: Eligible, but more admin/compliance complexity`
+
+### Reuse existing logic where possible
+If the app already has warning logic or structural constants for:
+- CAEN limits
+- employee limits
+- family-only constraints
+- SRL-specific structural conditions
+
+reuse them instead of duplicating logic.
+
+### Goal
+I want the app to answer two different user questions:
+1. `Which option gives me the best net outcome?`
+2. `Which option is actually structurally compatible with what I want to do?`
+
+These are different questions and should not be mixed into one overloaded page.
+
+---
+
+## 4. Implementation guidance
 
 Before coding, first explain:
-1. how you will make cell explanations truly monthly vs annual depending on the hovered cell
-2. how you will keep all cell explanations consistently in EUR when the table cell is in EUR
-3. how you will structure the vertical mini-ledger explanations
-4. how you will expose constant context inside cell explanations
-5. how you will add and wire the Acronyms page across the app
-6. which files/components you will update
+1. whether PFA and II are currently using the same financial engine in the code
+2. whether IF is meaningfully modeled as a distinct financial case right now
+3. whether the comparison UI should merge PFA and II in the current version
+4. what inputs/outputs the Eligibility Simulator page will have
+5. which existing rules/warnings/constants can be reused
+6. which files/components/routes you will add or modify
 
 Then implement the changes.
 Do not jump straight into code.
+
+## Additional simplification for solo mode
+
+This simulator is primarily designed for a **solo user case**.
+
+### 1. Add `CAEN` to the glossary
+Make sure `CAEN` is clearly defined in the Acronyms / Glossary page in simple language, for example:
+- `CAEN = official Romanian activity classification code/category used to define which business activities a structure is allowed to perform`
+
+Also make sure any UI usage of `CAEN` links to the glossary/help entry.
+
+### 2. Simplify the financial comparison for solo mode
+Reassess whether `PFA`, `II`, and `IF` truly need to appear as separate financial comparison options.
+
+If the current financial engine produces the same tax/net result for `PFA` and `II` in the current solo simulation logic, then merge them into a single comparison option such as:
+- `PFA / II`
+
+### 3. Do not show IF as a normal default solo comparison option
+Because this simulator is for a solo use case, `IF` should not be shown as a standard financial comparison card by default.
+
+Instead:
+- either hide it from the default money comparison
+- or show it only as a special/non-default structure with a note like:
+  - `Family structure, not standard for solo setups`
+
+### 4. Keep structures separate outside the money comparison
+Even if `PFA` and `II` are merged in the financial comparison view, keep `PFA`, `II`, `IF`, and `SRL` separate in:
+- the Structures Guide
+- the Acronyms / Glossary page
+- the Eligibility Simulator
+
+Because their structural constraints still differ:
+- CAEN limits
+- employee limits
+- family-only constraints
+- scaling/administrative implications
+
+### 5. Implementation check before coding
+Before implementing, first confirm:
+- whether `PFA` and `II` currently use the same financial engine in the code
+- whether `IF` is meaningfully distinct in the current financial simulation
+- whether the solo comparison should therefore become:
+  - `PFA / II`
+  - `SRL`
+  - and optionally a non-default `IF` informational case
+
+Then implement the simplification.
+Do not keep duplicate comparison cards if they produce the same financial outcome in solo mode.
