@@ -1,0 +1,144 @@
+/* ─── Recommendations ─── */
+.recommendations-section {
+  margin-bottom: 24px;
+}
+
+.recommendation-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ─── Comparison grid ─── */
+.comparison-section {
+  margin-bottom: 24px;
+}
+
+.comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+/* ─── Warnings section ─── */
+.warnings-section {
+  margin-bottom: 24px;
+}
+
+/* ─── Scenario summary ─── */
+.scenario-summary {
+  margin-bottom: 12px;
+}
+
+.scenario-summary-card {
+  padding: 16px 20px;
+}
+
+.scenario-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scenario-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+
+.scenario-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scenario-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.scenario-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.scenario-value .dual-ron {
+  font-size: 11px;
+  display: inline;
+  margin-left: 6px;
+}
+
+/* ─── Best scenario card ─── */
+.best-scenario-section {
+  margin-bottom: 20px;
+}
+
+.best-scenario-card {
+  padding: 16px 20px;
+  border-color: var(--color-success);
+  background: var(--color-success-light);
+}
+
+.best-scenario-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.best-scenario-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.best-scenario-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-success);
+}
+
+.best-scenario-structure {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.best-scenario-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.best-scenario-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.best-scenario-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.best-scenario-delta {
+  color: var(--color-success);
+}
+
+.best-scenario-stat-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}

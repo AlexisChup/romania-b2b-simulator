@@ -1,0 +1,14 @@
+/* ─── Chart section ─── */
+.chart-section {
+  margin-bottom: 24px;
+}
+
+.chart-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  height: 340px;
+  position: relative;
+}

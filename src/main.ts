@@ -5,8 +5,8 @@ import { generateWarnings } from './core/warnings';
 import { generateRecommendations } from './core/recommendationEngine';
 import { compareResults } from './core/comparators';
 import { renderComparisonCards, renderRecommendations, renderWarnings, renderScenarioSummary, renderBestScenario } from './components/resultsPanel';
-import { renderConstantsTable } from './components/constantsPanel';
 import { renderMonthlyChart } from './components/monthlyChart';
+import { renderConstantsTable } from './components/constantsPanel';
 import { getDefaults } from './core/constants';
 
 // ─── DOM references ───
@@ -57,7 +57,7 @@ const constantsTable = $('constantsTable');
 
 // ─── Toggle state ───
 
-let billableDaysMode: 'monthly' | 'yearly' = 'monthly';
+let billableDaysMode: 'monthly' | 'yearly' = 'yearly';
 let otherIncomeMode: 'monthly' | 'yearly' = 'monthly';
 
 // ─── Initialize defaults ───
@@ -91,13 +91,13 @@ initSegmentedControl(billableDaysToggle, (value) => {
   if (value === 'monthly') {
     billableDaysUnitEl.textContent = '/ month';
     billableDaysHintEl.textContent = 'Working days you invoice each month';
-    billableDaysEl.value = '20';
+    billableDaysEl.value = '18';
     billableDaysEl.max = '31';
     billableDaysEl.step = '1';
   } else {
     billableDaysUnitEl.textContent = '/ year';
     billableDaysHintEl.textContent = 'Total working days you invoice per year';
-    billableDaysEl.value = '240';
+    billableDaysEl.value = '216';
     billableDaysEl.max = '366';
     billableDaysEl.step = '1';
   }
@@ -233,8 +233,9 @@ function runSimulation(): void {
   renderScenarioSummary(scenarioSummary, inputs, results);
 
   // Best scenario card
+  const billableDaysPerYear = inputs.billableDaysPerMonth * 12;
   bestScenarioSection.style.display = 'block';
-  renderBestScenario(bestScenarioSection, comparison);
+  renderBestScenario(bestScenarioSection, comparison, billableDaysPerYear);
 
   // Recommendations
   if (recommendations.length > 0) {
@@ -271,3 +272,4 @@ document.querySelectorAll<HTMLInputElement>('.input-panel input, .input-panel se
 // ─── Constants table ───
 
 renderConstantsTable(constantsTable);
+

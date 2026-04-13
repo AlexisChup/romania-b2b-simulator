@@ -1,0 +1,35 @@
+/* ─── About page ─── */
+.about-content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 0 60px;
+}
+
+.about-content h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.about-content h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+.about-content p {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.about-content a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.about-content a:hover {
+  text-decoration: underline;
+}

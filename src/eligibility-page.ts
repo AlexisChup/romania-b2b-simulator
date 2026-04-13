@@ -1,6 +1,6 @@
 import './styles/main.css';
-import type { EligibilityInput } from './core/eligibilityEngine';
-import { evaluateEligibility } from './core/eligibilityEngine';
+import type { EligibilityInput, BestFitRecommendation } from './core/eligibilityEngine';
+import { evaluateEligibility, recommendBestFit } from './core/eligibilityEngine';
 import { glossaryLink } from './core/glossary';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -16,6 +16,8 @@ const combineToggle = $<HTMLDivElement>('combineToggle');
 const evaluateBtn = $<HTMLButtonElement>('evaluateBtn');
 const resultsSection = $('eligibilityResults');
 const cardsContainer = $('eligibilityCards');
+const eligBestFitEl = $('eligBestFit');
+const eligEmptyState = document.getElementById('eligEmptyState');
 
 // ─── Segmented control state ───
 
@@ -100,13 +102,69 @@ function reasonIcon(type: string): string {
   }
 }
 
+// ─── Render best-fit recommendation ───
+
+function renderBestFit(rec: BestFitRecommendation | null): void {
+  if (!rec) {
+    eligBestFitEl.innerHTML = `
+      <div class="elig-no-fit card">
+        <div class="elig-no-fit-icon">⚠️</div>
+        <h3 class="elig-no-fit-title">No eligible structure found</h3>
+        <p class="elig-no-fit-body">Your current setup is incompatible with all four structures. Review the card details below and adjust your inputs.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const conditionalNote = rec.isConditional
+    ? `<span class="elig-bff-conditional">⚠ Conditionally eligible — review constraints below</span>`
+    : '';
+
+  const fitHtml = rec.fitReasons.map(r => `<li>${r}</li>`).join('');
+  const tradeoffHtml = rec.tradeoffs.map(t => `<li>${t}</li>`).join('');
+  const limitHtml = rec.keyLimits.map(l => `<li>${l}</li>`).join('');
+
+  eligBestFitEl.innerHTML = `
+    <div class="elig-best-fit card">
+      <div class="elig-bff-header">
+        <div>
+          <span class="elig-bff-label">Best fit for your setup</span>
+          <div class="elig-bff-name">${rec.structureName}</div>
+          <div class="elig-bff-fullname">${rec.fullName}</div>
+          ${conditionalNote}
+        </div>
+        <span class="elig-bff-badge">★ Best fit</span>
+      </div>
+      <p class="elig-bff-summary">${rec.summary}</p>
+      <div class="elig-bff-grid">
+        <div class="elig-bff-col">
+          <span class="elig-bff-col-label">Why this fits</span>
+          <ul class="elig-bff-list elig-bff-list-positive">${fitHtml}</ul>
+        </div>
+        <div class="elig-bff-col">
+          <span class="elig-bff-col-label">Trade-offs</span>
+          <ul class="elig-bff-list elig-bff-list-warning">${tradeoffHtml}</ul>
+        </div>
+        ${limitHtml ? `<div class="elig-bff-col">
+          <span class="elig-bff-col-label">Key limits &amp; triggers</span>
+          <ul class="elig-bff-list elig-bff-list-limit">${limitHtml}</ul>
+        </div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
 // ─── Render results ───
 
 function renderResults(): void {
   const input = gatherInputs();
   const results = evaluateEligibility(input);
+  const rec = recommendBestFit(results, input);
 
+  if (eligEmptyState) eligEmptyState.style.display = 'none';
   resultsSection.style.display = 'block';
+
+  renderBestFit(rec);
   cardsContainer.innerHTML = '';
 
   // Sort: eligible first, then conditional, then not-suitable, then not-eligible

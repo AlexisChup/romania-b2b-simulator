@@ -1,0 +1,201 @@
+/* ─── Header ─── */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-text);
+  letter-spacing: -0.5px;
+}
+
+.logo-accent {
+  color: var(--color-primary);
+}
+
+.main-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.nav-link.active {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+/* ─── Intro ─── */
+.intro {
+  padding: 40px 0 24px;
+}
+
+.intro h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.intro-sub {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  max-width: 640px;
+}
+
+.disclaimer {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--color-warning-light);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-warning);
+}
+
+/* ─── Simulator layout ─── */
+.simulator-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .simulator-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main-content {
+  padding-bottom: 60px;
+}
+
+/* ─── Eligibility layout ─── */
+.eligibility-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 900px) {
+  .eligibility-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .eligibility-layout aside .input-panel {
+    position: static;
+  }
+}
+
+.eligibility-results-col {
+  min-width: 0;
+}
+
+/* ─── Footer ─── */
+.site-footer {
+  margin-top: 40px;
+  padding: 24px 0;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.footer-inner p {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.footer-inner p:last-child {
+  margin-bottom: 0;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-dot {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.footer-note {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+}
+
+.site-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ─── Responsive (global) ─── */
+@media (max-width: 600px) {
+  .intro h1 {
+    font-size: 22px;
+  }
+
+  .recommendation-cards {
+    flex-direction: column;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .input-panel {
+    position: static;
+  }
+
+  .structures-content {
+    grid-template-columns: 1fr;
+  }
+}

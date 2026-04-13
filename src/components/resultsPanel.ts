@@ -157,6 +157,7 @@ export function renderScenarioSummary(
 export function renderBestScenario(
   container: HTMLElement,
   comparison: ComparisonResult,
+  billableDaysPerYear: number,
 ): void {
   const best = comparison.results.find(r => r.structureType === comparison.bestPersonalNet);
   if (!best) { container.innerHTML = ''; return; }
@@ -180,6 +181,12 @@ export function renderBestScenario(
             <span class="best-scenario-stat-value">${formatEur(best.monthlyNetPersonalCash)}</span>
             <span class="best-scenario-stat-label">per month</span>
           </div>
+          ${billableDaysPerYear > 0 ? `
+          <div class="best-scenario-stat">
+            <span class="best-scenario-stat-value">${formatEur(Math.round(best.annualNetPersonalCash / billableDaysPerYear))}</span>
+            <span class="best-scenario-stat-label">per billable day</span>
+          </div>
+          ` : ''}
           ${deltaMonthly > 0 ? `
           <div class="best-scenario-stat">
             <span class="best-scenario-stat-value best-scenario-delta">+${formatEur(deltaMonthly)}/mo</span>

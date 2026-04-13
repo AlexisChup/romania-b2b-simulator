@@ -1,0 +1,363 @@
+/* ─── Constants panel ─── */
+.constants-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+}
+
+.constants-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  list-style: none;
+}
+
+.constants-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.toggle-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.constants-table-wrap {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.constants-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.constants-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--color-border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.constants-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: top;
+}
+
+.constants-table tr:hover td {
+  background: var(--color-bg);
+}
+
+.constant-value {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.constant-label {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.constant-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  max-width: 320px;
+}
+
+.constant-source {
+  font-size: 12px;
+}
+
+.constant-source a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.constant-source a:hover {
+  text-decoration: underline;
+}
+
+/* ─── Breakdown table (monthly spreadsheet) ─── */
+.breakdown-details {
+  margin-top: 4px;
+}
+
+details.breakdown-details summary {
+  padding: 8px 0 4px;
+  user-select: none;
+}
+
+details.breakdown-details[open] summary {
+  margin-bottom: 4px;
+}
+
+.breakdown-table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+}
+
+.breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  min-width: 900px;
+}
+
+.breakdown-table thead th {
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.breakdown-table thead th.bd-label-head {
+  text-align: left;
+  min-width: 180px;
+}
+
+.breakdown-table thead th.bd-annual-head {
+  background: var(--color-primary-light);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.breakdown-table tbody td {
+  padding: 5px 8px;
+  text-align: right;
+  border-bottom: 1px solid var(--color-border-light);
+  white-space: nowrap;
+}
+
+.breakdown-table tbody td.bd-label {
+  text-align: left;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: normal;
+}
+
+.breakdown-table tbody td.bd-annual {
+  background: rgba(37, 99, 235, 0.03);
+  font-weight: 600;
+}
+
+/* ─── Breakdown cell modifiers ─── */
+.bd-rate {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
+.bd-neg {
+  color: var(--color-danger);
+}
+
+.bd-zero {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.bd-ron {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* ─── Category row colors ─── */
+.bd-row-revenue td.bd-label {
+  border-left: 3px solid var(--color-success);
+}
+
+.bd-row-expense td.bd-label {
+  border-left: 3px solid var(--color-warning);
+}
+
+.bd-row-tax td.bd-label {
+  border-left: 3px solid var(--color-danger);
+}
+
+.bd-row-contribution td.bd-label {
+  border-left: 3px solid var(--color-info);
+}
+
+.bd-row-result td.bd-label {
+  border-left: 3px solid var(--color-primary);
+}
+
+.bd-row-assumption td.bd-label {
+  border-left: 3px solid var(--color-accent);
+}
+
+.bd-row-subtotal td.bd-label {
+  border-left: 3px solid var(--color-text-muted);
+}
+
+.bd-row-highlight td {
+  background: rgba(37, 99, 235, 0.04);
+  font-weight: 600;
+}
+
+.bd-row-highlight td.bd-label {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ─── Section header rows ─── */
+.bd-row-section-header td {
+  padding: 0;
+}
+
+.bd-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  padding: 10px 12px 6px !important;
+  border-bottom: 2px solid var(--color-border) !important;
+  border-left: none !important;
+}
+
+/* ─── Subtotal rows ─── */
+.bd-row-subtotal-highlight td {
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bd-row-subtotal td.bd-label {
+  font-weight: 600;
+  color: var(--color-text);
+  font-style: italic;
+}
+
+.bd-row-subtotal td {
+  font-weight: 500;
+}
+
+/* ─── Cell formula tooltips ─── */
+.bd-cell-numeric[data-formula],
+.bd-cell-numeric[data-formula-steps] {
+  cursor: help;
+  position: relative;
+  transition: background 0.1s ease;
+}
+
+.bd-cell-numeric[data-formula]:hover,
+.bd-cell-numeric[data-formula-steps]:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.bd-cell-active {
+  background: rgba(37, 99, 235, 0.12) !important;
+}
+
+/* ─── Formula popup ─── */
+.cell-formula-popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  background: var(--color-text);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 380px;
+  min-width: 200px;
+  width: max-content;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-formula-popup.visible {
+  display: block;
+}
+
+.cell-formula-popup::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-text);
+}
+
+/* ─── Formula ledger (structured steps) ─── */
+.formula-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.formula-step {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 1px 0;
+}
+
+.formula-step-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.formula-step-amount {
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.formula-step-base {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.formula-step-add .formula-step-amount {
+  color: #6ee7b7;
+}
+
+.formula-step-subtract .formula-step-amount {
+  color: #fca5a5;
+}
+
+.formula-step-result {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 3px;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.formula-step-result .formula-step-amount {
+  color: #6ee7b7;
+}
+
+.formula-step-info {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+}
