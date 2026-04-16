@@ -183,6 +183,14 @@ details.breakdown-details[open] summary {
   font-weight: 400;
 }
 
+.bd-ron-monthly {
+  font-size: 9px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
 /* ─── Category row colors ─── */
 .bd-row-revenue td.bd-label {
   border-left: 3px solid var(--color-success);

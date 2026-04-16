@@ -27,6 +27,20 @@
       "confidence": "high"
     },
     {
+      "id": "ro_micro_tax_rate_3pct_2026",
+      "label": "SRL micro tax rate (3%)",
+      "description": "Higher micro tax rate for companies with CAEN codes outside IT/technology (e.g. HoReCa, consulting). Applied to revenue.",
+      "value": 0.03,
+      "unit": "fraction",
+      "appliesTo": ["SRL"],
+      "condition": "Micro regime, non-IT CAEN codes, tax year ≥ 2026",
+      "validityStart": "2026-01-01",
+      "validityEnd": null,
+      "sourceUrl": null,
+      "sourceType": "official",
+      "confidence": "high"
+    },
+    {
       "id": "ro_micro_turnover_cap_eur",
       "label": "Micro turnover cap",
       "description": "Annual turnover ceiling for micro regime. If exceeded during the year, company switches to profit tax starting the quarter of exceedance. Cannot opt back for the next period.",

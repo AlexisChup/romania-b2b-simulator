@@ -404,10 +404,12 @@ export function computeSrl(inputs: SimulatorInputs): SrlResult {
   let companyTax: number;
   let companyTaxLabel: string;
   const regime = inputs.srlRegime;
+  const isMicro = regime === 'micro' || regime === 'micro_3';
+  const effectiveMicroRate = regime === 'micro_3' ? TAX.microRate3Pct : TAX.microRate;
 
-  if (regime === 'micro') {
-    companyTax = revenue.annualTotalRevenue * TAX.microRate;
-    companyTaxLabel = `Micro tax (${TAX.microRate * 100}%)`;
+  if (isMicro) {
+    companyTax = revenue.annualTotalRevenue * effectiveMicroRate;
+    companyTaxLabel = `Micro tax (${effectiveMicroRate * 100}%)`;
   } else {
     const profitBeforeTax = revenue.annualTotalRevenue - annualOperatingExpenses - salary.totalCompanySalaryCost;
     companyTax = Math.max(0, profitBeforeTax) * TAX.citRate;
@@ -551,21 +553,21 @@ export function computeSrl(inputs: SimulatorInputs): SrlResult {
     },
     {
       label: companyTaxLabel,
-      tooltip: regime === 'micro'
+      tooltip: isMicro
         ? 'Flat tax on total revenue. Applied regardless of expenses.'
         : 'Tax on net profit (revenue minus expenses minus salary costs).',
       category: 'tax',
-      rate: regime === 'micro' ? `${TAX.microRate * 100}%` : `${TAX.citRate * 100}%`,
+      rate: isMicro ? `${effectiveMicroRate * 100}%` : `${TAX.citRate * 100}%`,
       values: Array(12).fill(-monthlyCompanyTax),
       annual: -companyTax,
       monthlyFormula: [
         { label: `Annual tax ${eur(companyTax)} ÷ 12`, type: 'base' },
         { label: 'Monthly tax', amount: eur(monthlyCompanyTax), type: 'subtract' },
       ],
-      annualFormula: regime === 'micro'
+      annualFormula: isMicro
         ? [
-            { label: `Micro tax rate: ${TAX.microRate * 100}%`, type: 'info' },
-            { label: `Revenue ${eur(revenue.annualTotalRevenue)} × ${TAX.microRate * 100}%`, type: 'base' },
+            { label: `Micro tax rate: ${effectiveMicroRate * 100}%`, type: 'info' },
+            { label: `Revenue ${eur(revenue.annualTotalRevenue)} × ${effectiveMicroRate * 100}%`, type: 'base' },
             { label: 'Annual micro tax', amount: eur(companyTax), type: 'subtract' },
           ]
         : [
