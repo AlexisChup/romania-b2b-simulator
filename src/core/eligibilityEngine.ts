@@ -140,8 +140,8 @@ function evaluateStructure(s: StructureData, input: EligibilityInput): Eligibili
 
   // ─── Structure-specific warnings ───
   if (s.id === 'SRL') {
-    nextWarnings.push('Micro regime requires ≥1 employee (90-day deadline for new companies)');
-    nextWarnings.push('Revenue above €100,000 triggers switch from micro (1%) to profit tax (16%)');
+    nextWarnings.push('Micro regime requires ≥1 employee (30-day deadline for new companies)');
+    nextWarnings.push('Revenue above €100,000 triggers switch from micro (1% or 3%) to profit tax (16%)');
     constraints.push('Double-entry bookkeeping required');
     constraints.push('Minimum share capital: 500 RON (5,000 RON if turnover > 400,000 RON)');
   }
@@ -330,7 +330,7 @@ function buildRecommendation(
   }
   if (s.id === 'SRL') {
     tradeoffs.push('16% dividend withholding tax on all profit distributions (2026)');
-    tradeoffs.push('Micro regime (1% tax) requires ≥1 employee and revenue ≤ €100,000');
+    tradeoffs.push('Micro regime (1% or 3% tax) requires ≥1 employee and revenue ≤ €100,000');
   }
   if (s.maxCaenClasses !== null) {
     tradeoffs.push(`Limited to ${s.maxCaenClasses} CAEN classes — exceeding this forces conversion to SRL`);

@@ -1,5 +1,5 @@
 export type StructureType = 'PFA' | 'II' | 'IF' | 'SRL';
-export type SrlRegime = 'micro' | 'profit_tax';
+export type SrlRegime = 'micro' | 'micro_3' | 'profit_tax';
 export type ExpenseMode = 'percent' | 'fixed';
 export type SalaryStrategy = 'no_salary' | 'minimum_salary' | 'custom_salary';
 export type DividendTiming = 'quarterly' | 'annual' | 'none';

@@ -30,6 +30,7 @@ export function getMeta() {
 // Pre-resolved tax constants for quick access
 export const TAX = {
   microRate: getConstantValue('ro_micro_tax_rate_2026'),
+  microRate3Pct: getConstantValue('ro_micro_tax_rate_3pct_2026'),
   microCapEur: getConstantValue('ro_micro_turnover_cap_eur'),
   dividendRate: getConstantValue('ro_dividend_tax_rate_2026'),
   citRate: getConstantValue('ro_cit_rate'),

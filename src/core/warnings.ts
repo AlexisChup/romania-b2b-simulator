@@ -72,7 +72,7 @@ export function generateWarnings(inputs: SimulatorInputs, results: SimulationRes
     id: 'micro_employee_condition',
     severity: 'info',
     title: 'Micro requires at least 1 employee',
-    message: 'SRL micro regime requires at least one employee. New companies must meet this within 90 days or switch to profit tax.',
+    message: 'SRL micro regime requires at least one employee. New companies must meet this within 30 days or switch to profit tax.',
     appliesTo: ['SRL'],
   });
 

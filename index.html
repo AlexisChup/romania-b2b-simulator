@@ -90,7 +90,7 @@
             <span class="toggle-indicator">▸</span>
           </summary>
           <div class="section-body">
-          <p class="section-desc">Deductible operating costs that reduce your taxable income when applicable. Examples: accountant fees, software subscriptions, coworking/office rent, hardware, travel, professional insurance. For PFA/II, these directly reduce your taxable base. For SRL micro, expenses do not reduce the 1% turnover tax but still affect profit available for distribution.</p>
+          <p class="section-desc">Deductible operating costs that reduce your taxable income when applicable. Examples: accountant fees, software subscriptions, coworking/office rent, hardware, travel, professional insurance. For PFA/II, these directly reduce your taxable base. For SRL micro, expenses do not reduce the turnover tax (1% or 3%) but still affect profit available for distribution.</p>
 
           <div class="input-group">
             <label class="input-label" for="expenseMode">How do you estimate expenses?</label>
@@ -179,10 +179,11 @@
             <div class="input-group">
               <label class="input-label" for="srlRegime">
                 Company tax regime
-                <span class="info-trigger" tabindex="0">?<span class="info-popup">Micro: 1% flat tax on revenue (if turnover ≤ €100k). Profit tax: 16% on net profit — better if you have high deductible expenses.</span></span>
+                <span class="info-trigger" tabindex="0">?<span class="info-popup">Micro 1%: flat tax on revenue for IT/technology CAEN codes (if turnover ≤ €100k). Micro 3%: flat tax on revenue for non-IT CAEN codes (e.g. HoReCa, consulting). Profit tax: 16% on net profit — better if you have high deductible expenses.</span></span>
               </label>
               <select id="srlRegime" class="input-field">
-                <option value="micro">Micro enterprise (1% of revenue)</option>
+                <option value="micro">Micro enterprise — 1% (IT/technology)</option>
+                <option value="micro_3">Micro enterprise — 3% (other CAEN codes)</option>
                 <option value="profit_tax">Profit tax (16% on net profit)</option>
               </select>
             </div>

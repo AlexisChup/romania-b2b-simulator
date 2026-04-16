@@ -80,10 +80,13 @@ function renderBreakdownTable(rows: MonthlyBreakdownRow[], fxRate: number): stri
     const fallbackAttr = (!row.monthlyFormula && row.formulaDetails) ? ` data-formula="${escapeAttr(row.formulaDetails)}"` : '';
     const fallbackAnnualAttr = (!row.annualFormula && row.formulaDetails) ? ` data-formula="${escapeAttr(row.formulaDetails)}"` : '';
 
+    const showMonthlyRon = isResult || isSubtotal;
+
     const monthlyCells = row.values.map(v => {
       const absV = Math.abs(v);
       const display = v === 0 ? '<span class="bd-zero">—</span>' : `<span class="${v < 0 ? 'bd-neg' : ''}">${v < 0 ? '−' : ''}€${Math.round(absV).toLocaleString('en-US')}</span>`;
-      return `<td class="bd-cell-numeric"${monthlyStepsAttr || fallbackAttr}>${display}</td>`;
+      const monthlyRon = (showMonthlyRon && v !== 0) ? `<br><span class="bd-ron-monthly">${formatRon(Math.abs(v) * fxRate)}</span>` : '';
+      return `<td class="bd-cell-numeric"${monthlyStepsAttr || fallbackAttr}>${display}${monthlyRon}</td>`;
     }).join('');
 
     const absAnnual = Math.abs(row.annual);
